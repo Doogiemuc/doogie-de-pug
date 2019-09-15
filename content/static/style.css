@@ -1,0 +1,110 @@
+/************** Overall layout ***************/
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.layout {
+	display: flex;
+  	flex-flow: column wrap;
+	height: 100vh;
+}
+
+/************** Navigation on the left  ***************/
+.navigation {
+	display: flex;
+	flex: 0 0 100%;
+	width: 30%;
+	/*min-width: 300px;*/
+  
+	position: fixed;
+
+	/* center content */
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	text-align: center;
+
+	/*
+
+	height: 100vh;
+	width: 30vh;
+	
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: flex;
+	
+	justify-content: space-between;
+	border-right: 1px solid #ebebeb;
+	text-align: center;
+	*/
+}
+
+header {
+	margin-top: 40px;
+}
+
+.siteTitle {
+	margin: 1rem 0;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+.siteDescription {
+	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
+	font-size: 1rem;
+	color: grey;
+	font-weight: normal;
+}
+
+footer {
+	/*
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	*/
+	width: 100%;
+	text-align: center;
+	padding: 1rem 0;
+	border-top: 1px solid #ebebeb;
+}
+footer a {
+	color: grey;
+	text-decoration: none;
+}
+
+/************** Content on the right ***************/
+.content {
+	flex: 0 0 100%;
+	width: 70%;
+	margin-left: 30%;
+}
+
+
+/* Special styling for mobile devices 
+@media (max-width: 768px) {
+	.layout {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.nav {
+		border-bottom: 1px solid #ebebeb;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		text-align: center;
+	}
+
+	.content {
+		flex-grow: 1;
+	}
+}
+*/
+
+
+

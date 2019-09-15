@@ -1,0 +1,37 @@
+{
+  "name": "doogie-de-2019-pug",
+  "private": false,
+  "description": "Roberts private homepage. Created with love and the awesome PUG library",
+  "license": "open source",
+  "version": "0.1.0",
+  "author": "Doogie",
+  "scripts": {
+    "build": "node buildSite.js",
+    "super": "supervisor -w content --extensions js,pug,json,css --no-restart-on success buildSite.js",
+    "mon": "nodemon buildSite.js",
+    "front": "reload --dir dist --watch-dir dist --port 3007 --browser"
+  },
+  "dependencies": {
+    "json5": "^2.1.0",
+    "ncp": "^2.0.0",
+    "pug": "2.0.4"
+  },
+  "keywords": [
+    "doogie.de",
+    "static site generator"
+  ],
+  "devDependencies": {
+    "nodemon": "^1.19.2",
+    "reload": "^3.0.1",
+    "supervisor": "^0.12.0"
+  },
+  "nodemonConfig": {
+    "watch": [
+      ".",
+      "content/pages",
+      "content/blog-posts",
+      "content/static"
+    ],
+    "ext": "js,pug,json,css"
+  }
+}

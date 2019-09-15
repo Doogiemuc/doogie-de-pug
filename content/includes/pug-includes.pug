@@ -1,0 +1,12 @@
+//-
+//- PUG Mixins for layout elements
+//-
+
+//- Blog title
+mixin blogTitle(title, date)
+	h1.blogTitle= title
+	span.blogDate= date
+
+mixin blogBody
+	div.blogBodyWrapper
+		block

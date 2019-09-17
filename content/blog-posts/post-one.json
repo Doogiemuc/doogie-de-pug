@@ -1,7 +1,0 @@
-{ 
-	id: "P-1",
-	title: "Post one that is long ago",
-	date: "2019-08-01",
-	tags: ["EINS", "ZWEI", "DREI"],
-	excerpt: "The most interesting thing you always wannted to know",
-}

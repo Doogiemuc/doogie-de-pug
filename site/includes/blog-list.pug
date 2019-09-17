@@ -1,0 +1,11 @@
+
+ul.blog-list
+	each post in posts
+		li.blog-list-item
+			a.excerpt-link(href='/blog-posts/'+post.id+'.pug')
+				.hero-image-wrapper(style='background-image: url("/static/images/'+post.img+'");')
+				.excerpt-content-wrapper
+					.excerpt-content
+						h1.post-title= post.title
+						span.post-date= post.date
+						p.post-excerpt= post.excerpt

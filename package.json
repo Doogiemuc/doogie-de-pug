@@ -7,7 +7,7 @@
   "author": "Doogie",
   "scripts": {
     "build": "node buildSite.js",
-    "super": "supervisor -w content --extensions js,pug,json,css --no-restart-on success buildSite.js",
+    "super": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
     "mon": "nodemon buildSite.js",
     "front": "reload --dir dist --watch-dir dist --port 3007 --browser"
   },

@@ -11,6 +11,23 @@ const readline = require('readline')
 const ncp = require('ncp').ncp;			// for recursive copying of files
 ncp.limit = 16;
 
+const sourceDir = 'site'
+const distDir   = 'dist'
+const dir = {
+	sourceDir: sourceDir,
+	blogPosts: path.join(sourceDir, 'blog-posts'),
+	includes:  path.join(sourceDir, 'includes'),
+	pages:     path.join(sourceDir, 'pages'),
+	static:    path.join(sourceDir, 'static'),
+	indexFile: 'index.pug',
+
+	distDir:       distDir,
+	distBlogPosts: path.join(distDir, 'blog-posts'),
+	distStatic:    path.join(distDir, 'static'),
+	distPages:     path.join(distDir, 'pages'),
+}
+
+
 /*
   1. read JSON5 metadata of all blog posts
   2. sort by date
@@ -19,14 +36,6 @@ ncp.limit = 16;
   5. render all posts (one HTML per post)
   6. render all static pages
  */
-
- // Open in_path/filename.json and parse its content als JSON5
-function parseMetadataFromJson(in_path, filename) {
-	let jsonPath    = path.resolve(in_path, filename+'.json')
-	let jsonString  = fs.readFileSync(jsonPath)
-	let json        = JSON5.parse(jsonString)
-	return json	
-}
 
 /**
  * Parse metadata from the first code block at the top of pugGile
@@ -58,80 +67,72 @@ async function parseMetadataFromPug(pugFile) {
 	return json5
 }
 
+ /* This is currently not used
+ // Open in_path/filename.json and parse its content als JSON5
+ function parseMetadataFromJson(in_path, filename) {
+	let jsonPath    = path.resolve(in_path, filename+'.json')
+	let jsonString  = fs.readFileSync(jsonPath)
+	let json        = JSON5.parse(jsonString)
+	return json	
+}
+*/
+
 /* 
   Render pug file to HTML (json "options" is available in the pug template)
   If options is an object, it will be available in the pug template
   Otherwise, if the pug template starts with a code block, then the first JSON inside that code block will be parsed as pug options
   */
 async function renderPage(in_path, filename, out_path, options) {
-	let pugPath       = path.resolve(in_path, filename)
-	let pugTemplate   = fs.readFileSync(pugPath)
-	let metadata      = options || await parseMetadataFromPug(pugPath) || {}
-	metadata.filename = pugPath
-	metadata.basedir  = path.join(__dirname, 'content')
-
-	console.log("Rendering pug", filename, "with metadata", metadata)
-
+	//console.log("renderPage", in_path, filename, out_path, options)
+	let pugFile       = path.resolve(in_path, filename)
+	let pugTemplate   = fs.readFileSync(pugFile)
+	let metadata      = options || await parseMetadataFromPug(pugFile) || {}
+	metadata.filename = pugFile
+	metadata.basedir  = dir.sourceDir
 	let html          = pug.render(pugTemplate, metadata)
-	let fullOutpath   = path.resolve(__dirname, out_path)
+	let fullOutpath   = path.resolve(out_path)
 	fs.mkdirSync(fullOutpath, { recursive: true })
-	let outfile       = path.resolve(__dirname, out_path, filename.replace('.pug', '.html'))
-	console.log("Rendered page:", pugPath, " => ", outfile)
-	fs.writeFileSync(outfile, html)
+	let outFile       = path.resolve(out_path, filename.replace('.pug', '.html'))
+	console.log("Render:", in_path+path.sep+filename, " => ", outFile)
+	fs.writeFileSync(outFile, html)
 	return metadata
 }
 
 // Load all blog posts and their metadata
-async function loadBlogPosts() {
-	console.log("==== Loading blog posts")
-	let posts = []
-	let tasks = []
-	let blogPostsPath = path.resolve(__dirname, 'content/blog-posts')
-	let items = fs.readdirSync(blogPostsPath)
-	items
+function renderBlogPosts() {
+	//TODO: search recursively
+	let tasks = fs.readdirSync(dir.blogPosts)
 		.filter(filename => filename.endsWith('.pug'))
-		.forEach(filename => {
-			//let json = parseMetadataFromPug(path.join(blogPostsPath, filename))
-			tasks.push(renderPage(blogPostsPath, filename, 'dist/blog-posts/'))
-		})
+		.map(filename => renderPage(dir.blogPosts, filename, dir.distBlogPosts))
 	return Promise.all(tasks).then(results => {
 		return Array.prototype.concat(results)
 	})
 }
 
-//============= render index.html ======================
-loadBlogPosts().then(posts => {
+//============= render all pages ======================
+
+function renderPages(options) {
+	let tasks = fs.readdirSync(dir.pages)
+		.filter(filename => filename.endsWith('.pug'))
+		.map(filename => renderPage(dir.pages, filename, dir.distPages, options))
+	return Promise.all(tasks).then(results => {
+		return Array.prototype.concat(results)
+	})
+}
+
+renderBlogPosts().then(posts => {
 	posts = posts.sort((p1, p2) => new Date(p1.date) < new Date(p2.date)).splice(0,5)   // sort by date descending, newest first
-	console.log("======== posts", posts)
-	renderPage('content/pages', 'index.pug', 'dist', { posts: posts })
+	//console.log("======== posts", posts)
+	renderPages()
+	// Render index.html
+	renderPage(dir.sourceDir, dir.indexFile, dir.distDir, { posts: posts })
 })
 
-//TODO: render "pages"
-
 //============= copy static assets ======================
-console.log("Copying static assets:")
-let sourcePath = path.resolve(__dirname, "content/static")
-let destPath = path.resolve(__dirname, 'dist/static')
-
-ncp(sourcePath, destPath, function (err) {
+console.log("Copying static assets to ", dir.distStatic)
+ncp(dir.static, dir.distStatic, function (err) {
 	if (err) {
 	  return console.error(err);
 	}
-	console.log('done!');
-});
-
-/*
-fs.mkdirSync(destPath, { recursive: true })
-
-let assets = fs.readdirSync(sourcePath)
-assets.forEach(asset => {
-	let source = path.join(sourcePath, asset)
-	let dest   = path.join(destPath, asset)
-	// create dest dir 
-	fs.copyFile(source, dest, (err) => {
-		if (err) throw err;
-		console.log(source, ' => ', dest);
-	})	
+	console.log('Done! Site created successfully in ', path.resolve(distDir));
 })
-
-*/

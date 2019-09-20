@@ -11,6 +11,8 @@ const readline = require('readline')
 const ncp = require('ncp').ncp;			// for recursive copying of files
 ncp.limit = 16;
 
+const logIndent = 40
+
 /*
   Default values for pathes.
   These are used 
@@ -58,27 +60,33 @@ const dist = {
  */
 async function parseMetadataFromPug(pugFile) {
 	return new Promise(function(resolve, reject) {
+		console.log(" ".repeat(logIndent), pugFile)
 		try {
 			// https://nodejs.org/api/readline.html
 			let lineReader  = readline.createInterface({
 				input: fs.createReadStream(pugFile),
 				crlfDelay: Infinity
 			})	
-			let inCodeBlock = false
+			let codeIndent = -1
 			let jsonString  = ""
 			lineReader.on('line', function (line) {
-				if (!inCodeBlock && line.startsWith('-')) {
-					inCodeBlock = true
+				let codeBlockStart  = line.match(/^(\t*)-$/)
+				let lineIsCodeBlock = codeIndent >= 0 && new RegExp("^(\\t{"+(codeIndent+1)+"})").test(line)
+				if (codeIndent < 0 && codeBlockStart) {
+					codeIndent = codeBlockStart[1].length  // number of tab characters indendation
 				} else
-				if (inCodeBlock && line.startsWith("\t")) {
+				if (lineIsCodeBlock) {
 					jsonString += line
 				} else 
-				if (inCodeBlock /* and line does not start with tab */) {
-					inCodeBlock = false
+				if (codeIndent >= 0) {
+					codeIndent = -1
 					lineReader.close()
 					let metadata = JSON5.parse(jsonString.match(/{.*}/))
 					resolve(metadata)
 				}
+			})
+			lineReader.on('close', function() {
+				if (jsonString === "") console.log("WARN: Did not find any metadata in", pugFile)
 			})
 		} catch (err) {
 			reject("ERROR parseMetadataFromPug(pugFile="+pugFile+"):"+ err)
@@ -93,7 +101,7 @@ async function parseMetadataFromPug(pugFile) {
  * @param {Array} list of metadata objects from top of pug files
  */
 function parseMetadata(sourceDir, urlPath) {
-	console.log("Parse metadata from pug files in "+sourceDir)
+	console.log("Parse metadata from pug files in", sourceDir)
 	let tasks = fs.readdirSync(sourceDir)
 		.filter(filename => filename.endsWith('.pug'))
 		.map(filename => {
@@ -132,7 +140,7 @@ function parseMetadata(sourceDir, urlPath) {
 */
 function renderPage(in_path, filename, urlPath, options) {
 	if (filename.endsWith('.pug')) filename = filename.slice(0,-4)
-	console.log("   ", path.join(in_path, filename+'.pug'), " => ", getUrl(urlPath, filename+'.html'))
+	console.log(" ".repeat(logIndent), path.join(in_path, filename+'.pug'), " => ", getUrl(urlPath, filename+'.html'))
 
 	let pugFile       = path.resolve(in_path, filename+'.pug')			// filename with absolut path
 	let outFile       = path.resolve(dir.dist, urlPath, filename+'.html')	
@@ -173,6 +181,10 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(posts => {
 	var postsById = {}
 	posts.forEach(post => postsById[post.id] = post)
 	posts = posts.sort((p1, p2) => new Date(p1.date) < new Date(p2.date)).splice(0,5)   // sort by date descending, newest first
+
+	//TODO:  add prev and next links to posts array
+
+
 	//console.log("======== postsById", postsById)
 	renderPages(site.blogPosts, dir.blogPosts, { posts: posts })
 	renderPages(site.pages,     dir.pages,     { posts: posts })
@@ -182,12 +194,12 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(posts => {
 })
 
 //============= copy static assets ======================
-console.log("Copy static assets", site.static, " => ", dist.static)
+console.log("Copy static assets".padEnd(logIndent), site.static, " => ", dist.static)
 ncp(site.static, dist.static, function (err) {
 	if (err) {
 	  return console.error(err);
 	}
-	console.log('Done! Site created successfully in ', path.resolve(dir.dist));
+	console.log("DONE! Site created successfully in".padEnd(logIndent), path.resolve(dir.dist));
 })
 
 

@@ -1,0 +1,35 @@
+doctype html
+
+mixin postTags(tags)
+	.post-tags
+		for tag in tags
+			span.post-tag= tag
+
+mixin postHeader(metadata) 
+	h1= metadata.title
+	.post-metadata
+		span(class="post-date")= metadata.date
+		+postTags(metadata.tags)
+
+mixin postFooter(metadata)
+	.post-footer
+		a(href="previousPost.html").pref-post-link
+			| <<
+		a(href="previousPost.html").next-post-link
+			| >>
+
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		meta(http-equiv="X-UA-Compatible", content="ie=edge")
+		link(rel="stylesheet", href="/static/style.css")
+		title Doogie.de
+	body
+		.layout
+			.navigation
+				include navigation.pug
+			.left-spacer &nbsp;
+			.content.blogPost
+				block content
+

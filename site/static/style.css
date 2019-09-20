@@ -24,19 +24,23 @@ body {
 	border-right: 1px solid #ebebeb;
 }
 
-/* 
-  This spacer is as wide as the fixed navigation 
-  It keeps the content from slipping under the navigation
-*/
-.left-spacer {
-	width: 30%;
-	height: 100vh;
-	min-width: 300px;
-	flex-shrink: 0;
+header {
+	height: 33.3333vh;
+	min-height: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: Georgia, Times, "Times New Roman", serif;
 }
 
-header {
-	margin-top: 20px;
+header a {
+	text-decoration: none;
+}
+
+header a:visited {
+	color: blue;
+	
 }
 
 .siteLogo {
@@ -45,10 +49,7 @@ header {
 
 .siteTitle {
 	margin: 0;
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-weight: bold;
 	font-size: 36pt;
-	letter-spacing: 0px;
 }
 
 .siteDescription {
@@ -74,7 +75,18 @@ footer a {
 	flex-grow: 1;
 }
 
-/************** Content on the right ***************/
+/* 
+  This spacer is as wide as the fixed navigation 
+  It keeps the content from slipping under the navigation
+*/
+.left-spacer {
+	width: 30%;
+	height: 100vh;
+	min-width: 300px;
+	flex-shrink: 0;
+}
+
+/************** List of blog posts on the start page ***************/
 .blog-list {
 	list-style: none;
 	padding: 0;
@@ -144,13 +156,82 @@ footer a {
 	color: blue;
 }
 
-.excerpt-content .post-date {
-	color: rgb(70, 70, 70);
+.post-date {
+	color: darkgray;
+	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
+	margin: 0;
+	font-size: 1rem;
 }
+
+
 
 .excerpt-content .post-excerpt {
 	color: rgb(70, 70, 70);
 }
+
+
+/************** One blog post ***************/
+.blogPost {
+	margin: 2rem 10%;
+	font-family: Georgia, Times, "Times New Roman", serif;
+	/*font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;*/
+	line-height: 1.5;
+	font-size: 1.2rem;
+}
+
+.post-tags {
+	float: right;
+	color: darkgray;
+	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
+	margin: 0;
+	font-size: 0.75rem;
+}
+
+.post-tag {
+	border: 1px solid #ebebeb;
+	border-radius: 3px;
+	margin-left: 4px;
+	padding: 1px 4px;	
+}
+
+.blogPost h1:first-child {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0;
+}
+
+.blogPost p {
+	text-align: justify;
+}
+
+.pref-post-link {
+	text-decoration: none;
+	font-size: 0.8rem;
+}
+
+.next-post-link {
+	float: right;
+	text-decoration: none;
+	font-size: 0.8rem;
+
+}
+
+
+.post-footer {
+	margin-top: 2rem;
+	padding-top: 10px;
+	border-top: 1px solid #ebebeb;
+	color: #ebebeb;
+}
+
+.post-footer a {
+	color:lightgray;
+}
+.post-footer a:visited {
+	color:lightgray;
+}
+
+
 
 /* Special styling for mobile devices 
 @media (max-width: 768px) {

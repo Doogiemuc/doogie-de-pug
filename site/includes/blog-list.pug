@@ -2,7 +2,7 @@
 ul.blog-list
 	each post in posts
 		li.blog-list-item
-			a.excerpt-link(href='/blog-posts/'+post.id+'.html')
+			a.excerpt-link(href=post.url)
 				.hero-image-wrapper(style='background-image: url("/static/images/'+post.img+'");')
 				.excerpt-content-wrapper
 					.excerpt-content

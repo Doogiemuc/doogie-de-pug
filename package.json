@@ -6,9 +6,9 @@
   "version": "0.1.0",
   "author": "Doogie",
   "scripts": {
-    "build": "node buildSite.js",
-    "super": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
-    "mon": "nodemon buildSite.js",
+	"start": "nodemon buildSite.js",
+	"build": "node buildSite.js",
+    "supervisor": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
     "front": "reload --dir dist --watch-dir dist --port 3007 --browser"
   },
   "dependencies": {
@@ -27,11 +27,8 @@
   },
   "nodemonConfig": {
     "watch": [
-      ".",
-      "content/pages",
-      "content/blog-posts",
-      "content/static"
+      "site"
     ],
-    "ext": "js,pug,json,css"
+    "ext": "js,pug,json,css,png.jpg,md"
   }
 }

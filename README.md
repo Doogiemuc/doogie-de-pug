@@ -17,3 +17,12 @@ PUG is far more powerfull than most people know. I've built my complete blog sit
   npm run build
 
 Then the generated HTML files will be generated in the `site` directory.
+
+# Defending arguments
+
+No there is no webpack here. And no UglfyAnything plugin. There is no use in optimizing 100 bytes of CSS into 97.3234 bytes, if you load 100KB images at the same time. And a good site just has one simple CSS file.
+
+# Roadmap
+
+ - SVG Icon for Turtle  https://icon-icons.com/de/symbol/Schildkr%C3%B6te/100691
+ - Still looking for an icon of Achilles  (maybe use a bear)

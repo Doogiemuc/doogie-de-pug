@@ -27,6 +27,7 @@
   },
   "nodemonConfig": {
     "watch": [
+	  "buildSite.js",
       "site"
     ],
     "ext": "js,pug,json,css,png.jpg,md"

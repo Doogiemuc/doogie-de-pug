@@ -51,7 +51,12 @@ const dist = {
   4. render index.html with blog list and first n excerpts
   5. render all posts (one HTML per post)
   6. render all static pages
- */
+
+  Naming conventions for these methods:
+  basename - just the filename with extension but without path
+  filename - filename with a fully qualified path
+
+  */
 
 /**
  * Parse metadata from the first code block at the top of pugGile
@@ -96,9 +101,11 @@ async function parseMetadataFromPug(pugFile) {
 
 /**
  * Parse metadata from first code block of pug files.
- * For example from blog posts. Recursively traverses directory
+ * For example from blog posts. 
+ * TODO: Recursively traverses directory
  * @param {String} sourceDir relative path under dir.site to dir with .pug files
  * @param {Array} list of metadata objects from top of pug files
+ * @return {Array} list of metadata objects from each found pug file
  */
 function parseMetadata(sourceDir, urlPath) {
 	console.log("Parse metadata from pug files in", sourceDir)
@@ -107,8 +114,9 @@ function parseMetadata(sourceDir, urlPath) {
 		.map(filename => {
 			let pugFile = path.resolve(sourceDir, filename)
 			return parseMetadataFromPug(pugFile).then(metadata => {
-				metadata.filename = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths
-				metadata.basedir  = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
+				//metadata.filename = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
+				//metadata.basedir  = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths. 
+				metadata.basename = filename    // Just the filename without any path
 				metadata.url      = getUrl(urlPath, filename)
 				return metadata
 			})
@@ -145,7 +153,7 @@ function renderPage(in_path, filename, urlPath, options) {
 	let pugFile       = path.resolve(in_path, filename+'.pug')			// filename with absolut path
 	let outFile       = path.resolve(dir.dist, urlPath, filename+'.html')	
 	let metadata      = options || {}
-	metadata.filename = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths
+	metadata.filename = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
 	metadata.basedir  = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
 	
 	let pugTemplate   = fs.readFileSync(pugFile)
@@ -153,6 +161,55 @@ function renderPage(in_path, filename, urlPath, options) {
 	
 	fs.mkdirSync(path.dirname(outFile), { recursive: true })
 	fs.writeFileSync(outFile, html)
+}
+
+
+/**
+ * Recursively render all pug files in and below the given `dir` to HTML files
+ * @param {String} sourceDir top level directory where .pug files are
+ * @param {String} urlPath target directory. Files will be stored in `dir.dist + urlPath`
+ * @param {Object} options (optional) data that can be used in the pug templates
+ */
+function renderBlogPosts(sourceDir, urlPath, metadata) {
+	if (!fs.existsSync(sourceDir)) {
+		console.log("Render blog posts:", sourceDir, " =>  Directory does not exist!")
+		return
+	}
+	console.log("Render blog bosts:", sourceDir, " => ", getUrl(urlPath))
+	
+	// Enrich metadata of posts
+	let posts = metadata.posts.slice()  // make a copy!
+	var postsById = {}
+	posts.forEach(post => postsById[post.id] = post)
+	posts = posts.sort((p1, p2) => {
+		//TODO: sticky posts
+		return new Date(p1.date) < new Date(p2.date)
+	}).splice(0,5)   // sort by date descending, newest first
+	
+	// add prev and next links to posts array
+	if (posts.length > 2) { 
+		posts[0].next = {
+			title: posts[1].title,
+			url:   posts[1].url
+		}
+		posts[posts.length-1].prev = {
+			title: posts[posts.length-2].title,
+			url:   posts[posts.length-2].url
+		}
+		for (let i = 1; i < posts.length-1; i++) {
+			posts[i].prev = {
+				title: posts[i-1].title,
+				url:   posts[i-1].url
+			}
+			posts[i].next = {
+				title: posts[i+1].title,
+				url:   posts[i+1].url
+			}
+		}
+	}
+
+	// render blog posts with that metadata
+	posts.forEach(post => renderPage(sourceDir, post.basename, urlPath, { post: post }))
 }
 
 /**
@@ -177,20 +234,17 @@ function renderPages(sourceDir, urlPath, options) {
  * Then also render the blogPosts themselfs and static pages.
  */
 parseMetadata(site.blogPosts, dir.blogPosts).then(posts => {
-	// Create map   ID => filepath
-	var postsById = {}
-	posts.forEach(post => postsById[post.id] = post)
-	posts = posts.sort((p1, p2) => new Date(p1.date) < new Date(p2.date)).splice(0,5)   // sort by date descending, newest first
-
-	//TODO:  add prev and next links to posts array
 
 
-	//console.log("======== postsById", postsById)
-	renderPages(site.blogPosts, dir.blogPosts, { posts: posts })
-	renderPages(site.pages,     dir.pages,     { posts: posts })
+	// render Blog posts with metadata
+	//console.log("\n\n======= posts\n\n", posts, "\n\n")
+	renderBlogPosts(site.blogPosts, dir.blogPosts, { posts: posts })
+	
+	// render normal static pages
+	renderPages(site.pages, dir.pages, { posts: posts})
 
-	// render index.html
-	renderPage(dir.site, dir.indexFile, '', { posts: posts })
+	// render index.html   Uses list of posts to generate list of excerpts
+	renderPage(dir.site, dir.indexFile, '', { posts: posts})
 })
 
 //============= copy static assets ======================

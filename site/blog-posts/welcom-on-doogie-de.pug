@@ -1,4 +1,4 @@
-extend /includes/layout.pug
+extend /includes/blogPostLayout.pug
 
 block content
 	-
@@ -10,8 +10,9 @@ block content
 			excerpt: "This is my personal blog. Here I write about wherever the endless chain of hyperlinks may drive me. With an occasional excursus into politics and philosophy.",
 		}
 
-	h1= metadata.title
+	+postHeader(metadata)
 
 	p= metadata.excerpt
 
 	p I would like to encourage discussion. Feedback and comments about my articles are always welcome.
+

@@ -1,4 +1,4 @@
-extend /includes/layout.pug
+extend /includes/blogPostLayout.pug
 
 block content
 	-
@@ -10,7 +10,7 @@ block content
 			excerpt: "I read so many articles about bitcoins that were either completely incomprehensible, missing the interesting details or that were even plain wrong. So I wrote my own How-to. But before we can start to talk about bitcoins, we have to start a bit earlier in time.",
 		}
 
-	h1= metadata.title
+	+postHeader(metadata)
 
 	p= metadata.excerpt
 
@@ -194,3 +194,4 @@ block content
 	p And there are also crypto currencies that are not based on the blockchain. Instead they are based on other versions of a block chain algorithm. For example Ehtereum will soon change from proof-of-work to proof-of-stacke. And Iota uses a network of blocks, called „tangle“, to record valid transactions.
 
 	p The future of electronic cash and crypto currencies is a field which is worth monitoring very closely.
+

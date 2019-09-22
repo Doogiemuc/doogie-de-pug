@@ -188,12 +188,12 @@ footer a {
   bottom: 15px;
   right: 7px;
   left: auto;
-  width: 50%;
-  top: 80%;
-  max-width:300px;
+  width: 60%;
+  height: 50px;
+  /*max-width:300px;*/
   background: #777;
   box-shadow: 0 15px 10px #777;
-  transform: rotate(3deg);
+  transform: rotate(2deg);
 }
 
 .post-hero-image {

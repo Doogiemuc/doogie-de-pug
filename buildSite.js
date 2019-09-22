@@ -53,6 +53,9 @@ const dist = {
   6. render all static pages
 
   Naming conventions for these methods:
+  posts:   - array of post metadata extracted rom the pug files
+  metadata - the metadata of one post (filename, title, date, tags, ...)
+  postData - metadata plus some more attributes such as prev and next post
   basename - just the filename with extension but without path
   filename - filename with a fully qualified path
 
@@ -105,7 +108,7 @@ async function parseMetadataFromPug(pugFile) {
  * TODO: Recursively traverses directory
  * @param {String} sourceDir relative path under dir.site to dir with .pug files
  * @param {Array} list of metadata objects from top of pug files
- * @return {Array} list of metadata objects from each found pug file
+ * @return {Array} (A Promise that will resolve to a) list of metadata objects from each found pug file
  */
 function parseMetadata(sourceDir, urlPath) {
 	console.log("Parse metadata from pug files in", sourceDir)
@@ -152,12 +155,12 @@ function renderPage(in_path, filename, urlPath, options) {
 
 	let pugFile       = path.resolve(in_path, filename+'.pug')			// filename with absolut path
 	let outFile       = path.resolve(dir.dist, urlPath, filename+'.html')	
-	let metadata      = options || {}
-	metadata.filename = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
-	metadata.basedir  = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
+	options           = options || {}
+	options.filename  = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
+	options.basedir   = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
 	
 	let pugTemplate   = fs.readFileSync(pugFile)
-	let html          = pug.render(pugTemplate, metadata)
+	let html          = pug.render(pugTemplate, options)
 	
 	fs.mkdirSync(path.dirname(outFile), { recursive: true })
 	fs.writeFileSync(outFile, html)
@@ -165,12 +168,14 @@ function renderPage(in_path, filename, urlPath, options) {
 
 
 /**
- * Recursively render all pug files in and below the given `dir` to HTML files
+ * Recursively render all blog posts (pug files) in and below the given `dir` to HTML files.
+ * This also sorts the blog posts by date with sticky posts at the top.
  * @param {String} sourceDir top level directory where .pug files are
  * @param {String} urlPath target directory. Files will be stored in `dir.dist + urlPath`
- * @param {Object} options (optional) data that can be used in the pug templates
+ * @param {Object} posts an array of post metadata
+ * @return the sorted list of posts
  */
-function renderBlogPosts(sourceDir, urlPath, metadata) {
+function renderBlogPosts(sourceDir, urlPath, posts) {
 	if (!fs.existsSync(sourceDir)) {
 		console.log("Render blog posts:", sourceDir, " =>  Directory does not exist!")
 		return
@@ -178,13 +183,13 @@ function renderBlogPosts(sourceDir, urlPath, metadata) {
 	console.log("Render blog bosts:", sourceDir, " => ", getUrl(urlPath))
 	
 	// Enrich metadata of posts
-	let posts = metadata.posts.slice()  // make a copy!
 	var postsById = {}
 	posts.forEach(post => postsById[post.id] = post)
 	posts = posts.sort((p1, p2) => {
-		//TODO: sticky posts
-		return new Date(p1.date) < new Date(p2.date)
-	}).splice(0,5)   // sort by date descending, newest first
+		if (p1.sticky) return -1
+		if (p2.sticky) return 1
+		return new Date(p1.date) < new Date(p2.date) ? -1 : 1
+	})  // sort by date descending, newest first  with sticky posts at the top
 	
 	// add prev and next links to posts array
 	if (posts.length > 2) { 
@@ -209,7 +214,9 @@ function renderBlogPosts(sourceDir, urlPath, metadata) {
 	}
 
 	// render blog posts with that metadata
-	posts.forEach(post => renderPage(sourceDir, post.basename, urlPath, { post: post }))
+	posts.forEach(postData => renderPage(sourceDir, postData.basename, urlPath, { postData: postData }))
+
+	return posts
 }
 
 /**
@@ -235,16 +242,15 @@ function renderPages(sourceDir, urlPath, options) {
  */
 parseMetadata(site.blogPosts, dir.blogPosts).then(posts => {
 
-
 	// render Blog posts with metadata
 	//console.log("\n\n======= posts\n\n", posts, "\n\n")
-	renderBlogPosts(site.blogPosts, dir.blogPosts, { posts: posts })
+	posts = renderBlogPosts(site.blogPosts, dir.blogPosts, posts)
 	
 	// render normal static pages
-	renderPages(site.pages, dir.pages, { posts: posts})
+	renderPages(site.pages, dir.pages, { posts: posts})   // pass array of posts as "options" for the pug pages
 
 	// render index.html   Uses list of posts to generate list of excerpts
-	renderPage(dir.site, dir.indexFile, '', { posts: posts})
+	renderPage(dir.site, dir.indexFile, '', { posts: posts.splice(0,5)})   // index page ned first five posts
 })
 
 //============= copy static assets ======================

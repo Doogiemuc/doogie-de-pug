@@ -125,7 +125,7 @@ function parseMetadata(sourceDir, urlPath) {
 			})
 		})
 	return Promise.all(tasks).then(results => {
-		return Array.prototype.concat(results)
+		return Array.prototype.concat(results).filter(res => !res.hidden)
 	})
 }
 
@@ -188,7 +188,7 @@ function renderBlogPosts(sourceDir, urlPath, posts) {
 	posts = posts.sort((p1, p2) => {
 		if (p1.sticky) return -1
 		if (p2.sticky) return 1
-		return new Date(p1.date) < new Date(p2.date) ? -1 : 1
+		return new Date(p1.date) < new Date(p2.date) ? 1 : -1
 	})  // sort by date descending, newest first  with sticky posts at the top
 	
 	// add prev and next links to posts array
@@ -250,7 +250,7 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(posts => {
 	renderPages(site.pages, dir.pages, { posts: posts})   // pass array of posts as "options" for the pug pages
 
 	// render index.html   Uses list of posts to generate list of excerpts
-	renderPage(dir.site, dir.indexFile, '', { posts: posts.splice(0,5)})   // index page ned first five posts
+	renderPage(dir.site, dir.indexFile, '', { posts: posts.splice(0,10)})   // index page ned first five posts
 })
 
 //============= copy static assets ======================

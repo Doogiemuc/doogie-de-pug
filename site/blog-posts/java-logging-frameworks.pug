@@ -1,0 +1,48 @@
+extend /includes/blogPostLayout.pug
+
+block content
+	-
+		var metadata = { 
+			id: "java-logging-frameworks",
+			title: "History of java logging frameworks",
+			date: "2016-09-13",
+			img: "universe-blue.jpg",
+			tags: ["coding", "java"],
+			excerpt: "I have always been a fanatic about log output when coding.",
+		}
+
+	+postHeader(metadata)
+
+	p.keep-newline.
+		In the beginning there was java.utils.logging.
+		And it was included in the JDK since 1.4
+		And it was good.
+
+		But then came large java applications
+		And coders realized, that synchronous logging is bad.
+
+		So (as always) someone wrote a better logging library.
+		And thus Apache Log4j was born.
+		And it was good.
+
+		But then (as always) someone else wrote yet another logging library.
+		And thus logback was born.
+		And there was chaos.
+
+		But then the “simple logging facade for java” (SLF4J) was invented
+		with the intent to unite all logging frameworks.
+		And it was very very good.
+
+		But (as always) it was just again yet another logging framework
+		(or to be exact a facade for several frameworks)
+		And there was even more chaos.
+
+		Then Apache upgraded its logging framework Log4j to version 2.0
+		which providedes “significant improvements over its predecessor”
+		(according to its own doc).
+		Amongst other improvements it provides a log4j-to-slf4j adapter,
+		ie. an adapter for a facade of several logging frameworks.
+
+		And now every coder knows which log method to import. :-)
+		(Or was it LogManager or LogFactory or Logger ?????
+

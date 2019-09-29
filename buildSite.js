@@ -55,7 +55,6 @@ const dist = {
   Naming conventions for these methods:
   posts:   - array of post metadata extracted rom the pug files
   metadata - the metadata of one post (filename, title, date, tags, ...)
-  postData - metadata plus some more attributes such as prev and next post
   basename - just the filename with extension but without path
   filename - filename with a fully qualified path
 
@@ -125,7 +124,61 @@ function parseMetadata(sourceDir, urlPath) {
 			})
 		})
 	return Promise.all(tasks).then(results => {
-		return Array.prototype.concat(results).filter(res => !res.hidden)
+		let posts = Array.prototype.concat(results).filter(res => !res.hidden)
+		
+		// sort by date descending, newest first  with sticky posts at the top
+		posts = posts.sort((p1, p2) => {
+			if (p1.sticky) return -1
+			if (p2.sticky) return 1
+			return new Date(p1.date) < new Date(p2.date) ? 1 : -1
+		})  
+		
+		// add prev and next links to each post
+		if (posts.length > 2) { 
+			posts[0].next = {
+				title: posts[1].title,
+				url:   posts[1].url
+			}
+			posts[posts.length-1].prev = {
+				title: posts[posts.length-2].title,
+				url:   posts[posts.length-2].url
+			}
+			for (let i = 1; i < posts.length-1; i++) {
+				posts[i].prev = {
+					title: posts[i-1].title,
+					url:   posts[i-1].url
+				}
+				posts[i].next = {
+					title: posts[i+1].title,
+					url:   posts[i+1].url
+				}
+			}
+		}
+
+		// Count tags
+		let tagCountById = {}
+		posts.forEach(post => {
+			if (post.tags) {
+				post.tags.forEach(tag => {
+					tagCountById[tag] ? tagCountById[tag]++ : tagCountById[tag] = 1
+				})
+			}
+		})
+		let sortedTags = []
+		for (let tag in tagCountById) {
+			sortedTags.push({tag: tag, count: tagCountById[tag]})
+		}
+		sortedTags = sortedTags.sort((t1, t2) => t2.count - t1.count)  // Tags with the highest count first
+		
+		// map posts to their IDs
+		let postsById = {}
+		posts.forEach(post => postsById[post.id] = post)
+
+		return {
+			posts: posts,
+			postsById: postsById,
+			tags: sortedTags,
+		}
 	})
 }
 
@@ -166,7 +219,6 @@ function renderPage(in_path, filename, urlPath, options) {
 	fs.writeFileSync(outFile, html)
 }
 
-
 /**
  * Recursively render all blog posts (pug files) in and below the given `dir` to HTML files.
  * This also sorts the blog posts by date with sticky posts at the top.
@@ -175,48 +227,19 @@ function renderPage(in_path, filename, urlPath, options) {
  * @param {Object} posts an array of post metadata
  * @return the sorted list of posts
  */
-function renderBlogPosts(sourceDir, urlPath, posts) {
+function renderBlogPosts(sourceDir, urlPath, options) {
 	if (!fs.existsSync(sourceDir)) {
 		console.log("Render blog posts:", sourceDir, " =>  Directory does not exist!")
 		return
 	}
 	console.log("Render blog bosts:", sourceDir, " => ", getUrl(urlPath))
-	
-	// Enrich metadata of posts
-	var postsById = {}
-	posts.forEach(post => postsById[post.id] = post)
-	posts = posts.sort((p1, p2) => {
-		if (p1.sticky) return -1
-		if (p2.sticky) return 1
-		return new Date(p1.date) < new Date(p2.date) ? 1 : -1
-	})  // sort by date descending, newest first  with sticky posts at the top
-	
-	// add prev and next links to posts array
-	if (posts.length > 2) { 
-		posts[0].next = {
-			title: posts[1].title,
-			url:   posts[1].url
-		}
-		posts[posts.length-1].prev = {
-			title: posts[posts.length-2].title,
-			url:   posts[posts.length-2].url
-		}
-		for (let i = 1; i < posts.length-1; i++) {
-			posts[i].prev = {
-				title: posts[i-1].title,
-				url:   posts[i-1].url
-			}
-			posts[i].next = {
-				title: posts[i+1].title,
-				url:   posts[i+1].url
-			}
-		}
-	}
 
-	// render blog posts with that metadata
-	posts.forEach(postData => renderPage(sourceDir, postData.basename, urlPath, { postData: postData }))
-
-	return posts
+	// render blog posts
+	options.posts.forEach(post => {
+		options.post = options.postsById[post.id]   // every post needs its own data
+		renderPage(sourceDir, post.basename, urlPath, options)
+	})
+	options.post = undefined
 }
 
 /**
@@ -236,21 +259,24 @@ function renderPages(sourceDir, urlPath, options) {
 		.map(filename => renderPage(sourceDir, filename, urlPath, options))
 }
 
+
 /**
  * Parse metadata from blogPosts. Then use that data to render the index page with the list of blog excerpts.
  * Then also render the blogPosts themselfs and static pages.
  */
-parseMetadata(site.blogPosts, dir.blogPosts).then(posts => {
-
-	// render Blog posts with metadata
-	//console.log("\n\n======= posts\n\n", posts, "\n\n")
-	posts = renderBlogPosts(site.blogPosts, dir.blogPosts, posts)
+parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	
+	//console.log("\n\n======= posts and tags\n\n", options, "\n\n")
+
+	// render all blog posts
+	renderBlogPosts(site.blogPosts, dir.blogPosts, options),
+
 	// render normal static pages
-	renderPages(site.pages, dir.pages, { posts: posts})   // pass array of posts as "options" for the pug pages
+	renderPages(site.pages, dir.pages, options)   // pass array of posts as "options" for the pug pages
 
 	// render index.html   Uses list of posts to generate list of excerpts
-	renderPage(dir.site, dir.indexFile, '', { posts: posts.splice(0,10)})   // index page ned first five posts
+	options.posts = options.posts.splice(0,10) // index page ned first five posts
+	renderPage(dir.site, dir.indexFile, '', options)   
 })
 
 //============= copy static assets ======================

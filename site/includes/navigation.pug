@@ -5,13 +5,12 @@
 			h1.siteTitle Doogie.de
 		h3.siteDescription Robert's personal blog
 
-//-
 	nav
 		ul.tag-cloud
-			li 
-				a Tag1
-			li 
-				a Tag2
+			each tag in tags
+				if tag.count > 1
+					li 
+						a(href="/tag?tag="+tag.tag).post-tag= tag.tag
 
 footer
 	a(href="/pages/about.html").nav-link

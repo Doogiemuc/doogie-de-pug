@@ -102,9 +102,8 @@ async function parseMetadataFromPug(pugFile) {
 }
 
 /**
- * Parse metadata from first code block of pug files.
- * For example from blog posts. 
- * TODO: Recursively traverses directory
+ * Parse metadata from first code block of blog post pug files.
+ * Sort posts by date, calculate the next and prev links and count tags.
  * @param {String} sourceDir relative path under dir.site to dir with .pug files
  * @param {Array} list of metadata objects from top of pug files
  * @return {Array} (A Promise that will resolve to a) list of metadata objects from each found pug file
@@ -174,11 +173,15 @@ function parseMetadata(sourceDir, urlPath) {
 		let postsById = {}
 		posts.forEach(post => postsById[post.id] = post)
 
-		return {
+		let options = {
 			posts: posts,
 			postsById: postsById,
 			tags: sortedTags,
 		}
+
+
+
+		return options
 	})
 }
 
@@ -219,6 +222,24 @@ function renderPage(in_path, filename, urlPath, options) {
 	fs.writeFileSync(outFile, html)
 }
 
+
+function renderPage2(pugFile, url, options) {
+	console.log(" ".repeat(logIndent), pugFile, " => ", url)
+
+	let outFile       = path.resolve(dir.dist, url)
+	console.log("outFile ===", outFile)
+	options           = options || {}
+	options.filename  = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
+	options.basedir   = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
+	
+	let pugTemplate   = fs.readFileSync(pugFile)
+	let html          = pug.render(pugTemplate, options)
+	
+	fs.mkdirSync(path.dirname(outFile), { recursive: true })
+	fs.writeFileSync(outFile, html)
+}
+
+
 /**
  * Recursively render all blog posts (pug files) in and below the given `dir` to HTML files.
  * This also sorts the blog posts by date with sticky posts at the top.
@@ -232,7 +253,7 @@ function renderBlogPosts(sourceDir, urlPath, options) {
 		console.log("Render blog posts:", sourceDir, " =>  Directory does not exist!")
 		return
 	}
-	console.log("Render blog bosts:", sourceDir, " => ", getUrl(urlPath))
+	console.log("Render blog posts:".padEnd(logIndent), sourceDir, " => ", getUrl(urlPath))
 
 	// render blog posts
 	options.posts.forEach(post => {
@@ -274,9 +295,17 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	// render normal static pages
 	renderPages(site.pages, dir.pages, options)   // pass array of posts as "options" for the pug pages
 
+	//render one page for each tag. Could then be reached as  doogie.de/tagname
+	let tag = "Philosophy"
+	let optionsCopy = JSON.parse(JSON.stringify(options))
+	optionsCopy.posts = optionsCopy.posts.filter(post => post.tags && post.tags.includes(tag))
+	renderPage2(path.resolve(dir.site, dir.indexFile), 'tags/'+tag+'.html', optionsCopy)    // use relative url!
+	
+
 	// render index.html   Uses list of posts to generate list of excerpts
 	options.posts = options.posts.splice(0,10) // index page ned first five posts
-	renderPage(dir.site, dir.indexFile, '', options)   
+	renderPage(dir.site, dir.indexFile, '', options)
+	
 })
 
 //============= copy static assets ======================

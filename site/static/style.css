@@ -343,6 +343,10 @@ footer a:hover {
 		text-align: center;
 	}
 
+	.tag-cloud {
+		display: inline-flex;
+	}
+
 	footer {
 		border-bottom: 1px solid lightgray;
 	}

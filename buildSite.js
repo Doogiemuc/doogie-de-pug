@@ -178,55 +178,20 @@ function parseMetadata(sourceDir, urlPath) {
 			tags: sortedTags,
 		}
 
-
-
 		return options
 	})
 }
 
- /* This is currently not used
- // Open in_path/filename.json and parse its content als JSON5
- function parseMetadataFromJson(in_path, filename) {
-	let jsonPath    = path.resolve(in_path, filename+'.json')
-	let jsonString  = fs.readFileSync(jsonPath)
-	let json        = JSON5.parse(jsonString)
-	return json	
-}
-*/
-
-/** 
-  Render pug file to HTML (json "options" is available in the pug template)
-  If options is an object, it will be available in the pug template
-  Otherwise, if the pug template starts with a code block, then the first JSON inside that code block will be parsed as pug options
-  @param {String} in_path path to pug file
-  @param {String} filename filename of pug file
-  @param {String} outpath relative path under `dir.dist` where the rendered HTML file be stored
-  @param {Object} options (optional) data that can be used in the pug template
-  @return {Object} the extracted metadata from the pug file, merged with filename, basedir and out_path
-*/
-function renderPage(in_path, filename, urlPath, options) {
-	if (filename.endsWith('.pug')) filename = filename.slice(0,-4)
-	console.log(" ".repeat(logIndent), path.join(in_path, filename+'.pug'), " => ", getUrl(urlPath, filename+'.html'))
-
-	let pugFile       = path.resolve(in_path, filename+'.pug')			// filename with absolut path
-	let outFile       = path.resolve(dir.dist, urlPath, filename+'.html')	
-	options           = options || {}
-	options.filename  = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
-	options.basedir   = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
-	
-	let pugTemplate   = fs.readFileSync(pugFile)
-	let html          = pug.render(pugTemplate, options)
-	
-	fs.mkdirSync(path.dirname(outFile), { recursive: true })
-	fs.writeFileSync(outFile, html)
-}
-
-
-function renderPage2(pugFile, url, options) {
+/**
+ * 
+ * @param {String} pugFile path to pug file
+ * @param {String} url relative url that the file will be written to, e.g. blog-posts/
+ * @param {Object} options (optional) data that will be available inside the pug file
+ */
+function renderPage(pugFile, url, options) {
 	console.log(" ".repeat(logIndent), pugFile, " => ", url)
 
-	let outFile       = path.resolve(dir.dist, url)
-	console.log("outFile ===", outFile)
+	let outFile       = path.join(dir.dist, url)
 	options           = options || {}
 	options.filename  = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
 	options.basedir   = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
@@ -252,12 +217,12 @@ function renderBlogPosts(sourceDir, urlPath, options) {
 		console.log("Render blog posts:", sourceDir, " =>  Directory does not exist!")
 		return
 	}
-	console.log("Render blog posts:".padEnd(logIndent), sourceDir, " => ", getUrl(urlPath))
+	console.log("Render blog posts:", sourceDir, " => ", urlPath)
 
 	// render blog posts
 	options.posts.forEach(post => {
 		options.post = options.postsById[post.id]   // every post needs its own data
-		renderPage(sourceDir, post.basename, urlPath, options)
+		renderPage(path.join(sourceDir, post.basename), urlPath+'/'+post.basename.replace('.pug', '.html'), options)
 	})
 	options.post = undefined
 }
@@ -276,7 +241,7 @@ function renderPages(sourceDir, urlPath, options) {
 	console.log("Render Pages:", sourceDir, " => ", getUrl(urlPath))
 	let tasks = fs.readdirSync(sourceDir)
 		.filter(filename => filename.endsWith('.pug'))
-		.map(filename => renderPage(sourceDir, filename, urlPath, options))
+		.map(filename => renderPage(path.join(sourceDir, filename), urlPath+'/'+filename.replace('.pug', '.html'), options))
 }
 
 
@@ -294,28 +259,31 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	// render normal static pages
 	renderPages(site.pages, dir.pages, options)   // pass array of posts as "options" for the pug pages
 
-	//render one page for each tag. Could then be reached as  doogie.de/tagname
-	let tag = "Philosophy"
-	let optionsCopy = JSON.parse(JSON.stringify(options))
-	optionsCopy.posts = optionsCopy.posts.filter(post => post.tags && post.tags.includes(tag))
-	renderPage2(path.resolve(dir.site, dir.indexFile), 'tags/'+tag+'.html', optionsCopy)    // use relative url!
-	
+	//render one page for each tag. 
+	if (options.tags) {
+		console.log("Render taxonomy pages:")
+		options.tags.filter(tag => tag.count > 1).forEach(tag => {
+			console.log(" ".repeat(logIndent), "Tag: ", tag.tag)
+			let optionsCopy = JSON.parse(JSON.stringify(options))
+			optionsCopy.posts = optionsCopy.posts.filter(post => post.tags && post.tags.includes(tag.tag))
+			renderPage(path.join(dir.site, dir.indexFile), 'tags/'+encodeURIComponent(tag.tag)+'.html', optionsCopy)    // use relative url!
+		})
+	}
 
 	// render index.html   Uses list of posts to generate list of excerpts
+	console.log("Render "+dir.indexFile)
 	options.posts = options.posts.splice(0,10) // index page ned first five posts
-	renderPage(dir.site, dir.indexFile, '', options)
-	
-})
+	renderPage(path.join(dir.site, dir.indexFile), dir.indexFile.replace('.pug', '.html'), options)
+}).then(() => {
+	console.log("Copy static assets".padEnd(logIndent), site.static, " => ", dist.static)
+	ncp(site.static, dist.static, function (err) {
+		if (err) {
+		  return console.error(err);
+		}
+		console.log("DONE! Site created successfully in".padEnd(logIndent), path.resolve(dir.dist));
+	})
 
-//============= copy static assets ======================
-console.log("Copy static assets".padEnd(logIndent), site.static, " => ", dist.static)
-ncp(site.static, dist.static, function (err) {
-	if (err) {
-	  return console.error(err);
-	}
-	console.log("DONE! Site created successfully in".padEnd(logIndent), path.resolve(dir.dist));
 })
-
 
 
 function getUrl(urlPath, filename) {

@@ -1,9 +1,9 @@
 {
-  "name": "doogie-de-2019-pug",
+  "name": "doogie-de-pug",
   "private": false,
-  "description": "Roberts private homepage. Created with love and the awesome PUG library",
+  "description": "Roberts personal blog. Created with love and the awesome PUG library",
   "license": "open source",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Doogie",
   "scripts": {
 	"start": "nodemon buildSite.js",

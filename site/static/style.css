@@ -199,6 +199,33 @@ footer a:hover {
 	color: rgb(70, 70, 70);
 }
 
+.tag-header-wrapper {
+	text-align: center;
+	padding: 1rem 0;
+	margin: 0;
+	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
+	color: gray;
+	border-bottom: 1px solid lightgray;
+}
+
+.tag-header {
+	border: 1px solid #ebebeb;
+	border-radius: 3px;
+	margin-left: 4px;
+	padding: 1px 4px;
+}
+
+.tag-header-close {
+	float: right;
+	font-size: 0.8rem;
+	position: absolute;
+	right: 1rem;
+}
+
+.tag-header-close a {
+	text-decoration: none;
+}
+
 
 /************** One blog post ***************/
 .blog-post {
@@ -250,8 +277,8 @@ footer a:hover {
 
 .post-tags {
 	display: inline;
-	color: gray;
 	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
+	color: gray;
 	margin-left: 2rem;
 	font-size: 0.75rem;
 }

@@ -266,6 +266,7 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 			console.log(" ".repeat(logIndent), "Tag: ", tag.tag)
 			let optionsCopy = JSON.parse(JSON.stringify(options))
 			optionsCopy.posts = optionsCopy.posts.filter(post => post.tags && post.tags.includes(tag.tag))
+			optionsCopy.tagListHeader = tag.tag
 			renderPage(path.join(dir.site, dir.indexFile), 'tags/'+encodeURIComponent(tag.tag)+'.html', optionsCopy)    // use relative url!
 		})
 	}

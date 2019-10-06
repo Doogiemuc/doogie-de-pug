@@ -244,14 +244,14 @@ footer a:hover {
 	color: darkgray;
 	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
 	margin: 0;
-	font-size: 1rem;
+	font-size: 0.8rem;
 }
 
 .post-tags {
-	float: right;
+	display: inline;
 	color: gray;
 	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
-	margin: 5px 0 0 0;
+	margin-left: 2rem;
 	font-size: 0.75rem;
 }
 

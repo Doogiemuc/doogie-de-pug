@@ -6,7 +6,6 @@ const pug = require('pug')
 const fs = require('fs')
 const path = require('path')
 const JSON5 = require('json5')  // json for humans! :-)
-const { once } = require('events');
 const readline = require('readline')
 const ncp = require('ncp').ncp;			// for recursive copying of files
 ncp.limit = 16;

@@ -6,8 +6,9 @@
   "version": "1.0.0",
   "author": "Doogie",
   "scripts": {
-	"start": "nodemon buildSite.js",
-	"build": "node buildSite.js",
+	"start": "parcel site/index.pug --log-level 4",
+	"build": "parcel build site/index.pug",
+	"buildSite": "node buildSite.js",
     "supervisor": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
     "front": "reload --dir dist --watch-dir dist --port 3007 --browser"
   },
@@ -21,13 +22,14 @@
     "static site generator"
   ],
   "devDependencies": {
+    "cssnano": "^4.1.10",
     "nodemon": "^1.19.2",
     "reload": "^3.0.1",
     "supervisor": "^0.12.0"
   },
   "nodemonConfig": {
     "watch": [
-	  "buildSite.js",
+      "buildSite.js",
       "site"
     ],
     "ext": "js,pug,json,css,png.jpg,md"

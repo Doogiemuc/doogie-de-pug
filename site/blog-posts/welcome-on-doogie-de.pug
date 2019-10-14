@@ -1,0 +1,27 @@
+extend ../includes/blog-post-layout.pug
+
+block content
+	-
+		var metadata = { 
+			id: "welcome-on-doogie-de",
+			title: "Welcome on Doogie.de",
+			date: "2019-09-19",
+			img: "mandel-fractal.jpg",
+			tags: ["doogie.de"],
+			excerpt: "This is my personal blog. Here I write about wherever the never ending chain of hyperlinks may drive me. With an occasional excursus into politics and philosophy. I would like to encourage discussion. Feedback and comments about my articles are always welcome.",
+			sticky: true,
+			hidden: false,
+		}
+
+	+postHeader(metadata)
+
+	p= metadata.excerpt
+    
+	p The design of doogie.de is based on the awesome <a href="https://github.com/lizadikins/brevifolia">Brevifolia</a> layout. Most images are from <a href="https://unsplash.com/">https://unsplash.com</a>
+
+	p If you want to contact me, than you can do so via e-mail. If you don't know my e-mail by now, then <a href="https://www.denic.de/webwhois/")> go learn how the internet works.</a>
+	
+	p When you browse on doogie.de (or <em>any</em> other site on the net) some servers will know your <a href="https://en.wikipedia.org/wiki/IP_address">IP adress</a>. And IP adresses can be <a href="https://ipstack.com/">geocoded to lat+lon coordinates</a> very easily. If you don't want that, then stop using the internet.
+
+	blockquote Welcome in the 20th century.
+

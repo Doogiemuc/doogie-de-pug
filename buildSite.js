@@ -108,7 +108,7 @@ async function parseMetadataFromPug(pugFile) {
  * @return {Array} (A Promise that will resolve to a) list of metadata objects from each found pug file
  */
 function parseMetadata(sourceDir, urlPath) {
-	console.log("Parse metadata from pug files in", sourceDir)
+	console.log("Parse metadata from pug blog posts in", sourceDir)
 	let tasks = fs.readdirSync(sourceDir)
 		.filter(filename => filename.endsWith('.pug'))
 		.map(filename => {
@@ -225,6 +225,8 @@ function renderBlogPosts(sourceDir, urlPath, options) {
 		renderPage(path.join(sourceDir, post.basename), urlPath+'/'+post.basename.replace('.pug', '.html'), options)
 	})
 	options.post = undefined
+
+	console.log(JSON.stringify(options))
 }
 
 /**
@@ -245,10 +247,19 @@ function renderPages(sourceDir, urlPath, options) {
 }
 
 
+parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
+	let outFile = path.resolve(dir.site, 'pug.config.js')
+	console.log("Writing", outFile)
+	let content = "module.exports = { locals: " + JSON.stringify(options) + " }"
+	
+	fs.writeFileSync(outFile, content)
+})
+
+
 /**
  * Parse metadata from blogPosts. Then use that data to render the index page with the list of blog excerpts.
  * Then also render the blogPosts themselfs and static pages.
- */
+ 
 parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	
 	//console.log("\n\n======= posts and tags\n\n", options, "\n\n")
@@ -283,13 +294,15 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 		}
 		console.log("DONE! Site created successfully in".padEnd(logIndent), path.resolve(dir.dist));
 	})
-
 })
+*/
 
 
 function getUrl(urlPath, filename) {
+	/*
 	if (filename && filename.endsWith('.pug'))
 		filename = filename.slice(0,-4)+'.html'
+	*/
 	let url = dir.baseUrl + '/' + urlPath
 	if (filename)
 		url += '/' + filename

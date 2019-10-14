@@ -6,6 +6,7 @@
 		h3.siteDescription Robert's personal blog
 
 
+//-
 	nav
 		ul.tag-cloud
 			each tag in tags
@@ -14,10 +15,10 @@
 						a(href="/tags/"+encodeURIComponent(tag.tag)+".html").post-tag= tag.tag
 
 footer
-	a(href="/pages/about.html").nav-link
+	a(href="/blog-posts/welcome-on-doogie-de.pug" title="Impressum").nav-link
 		i.fas.fa-info-circle
-	a(href="https://github.com/doogiemuc", target="_blank").nav-link
+	a(href="https://github.com/doogiemuc" title="GitHub" target="_blank").nav-link
 		i.fab.fa-github
-	a(href="https://www.facebook.com/DoogieMuc", target="_blank").nav-link
+	a(href="https://www.facebook.com/DoogieMuc" title="Facebook" target="_blank").nav-link
 		i.fab.fa-facebook
 	

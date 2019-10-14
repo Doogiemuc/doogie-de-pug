@@ -13,16 +13,17 @@ mixin postHeader(post)
 		span(class="post-date")= post.date
 		+postTags(post.tags)
 
-mixin postFooter(post)
-	.post-footer
-		if post && post.prev
-			a(href=post.prev.url).post-link
-				| << 
-				span.post-link-title= post.prev.title
-		if post && post.next
-			a(href=post.next.url).post-link.post-link-next
-				span.post-link-title= post.next.title
-				| &nbsp;>>
+mixin postFooter(postsById)
+	if postsById && postsById[metadata.id]
+		.post-footer
+			if postsById[metadata.id].prev
+				a(href=postsById[metadata.id].prev.url).post-link
+					| << 
+					span.post-link-title= postsById[metadata.id].prev.title
+			if postsById[metadata.id].next
+				a(href=postsById[metadata.id].next.url).post-link.post-link-next
+					span.post-link-title= postsById[metadata.id].next.title
+					| &nbsp;>>
 
 html(lang="en")
 	include html-head.pug
@@ -35,7 +36,7 @@ html(lang="en")
 				//- MAYBE: I could add +postHeader(post) here. Does every post have the same header or do I need flexibility?  Its just one line in the post.pug
 				.blog-post
 					block content
-				+postFooter(post)
+				+postFooter(postsById)
 					
 					
 			

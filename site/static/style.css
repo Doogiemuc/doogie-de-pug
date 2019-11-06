@@ -395,6 +395,7 @@ footer a:hover {
 
 	.blog-list-item {
 		margin-top: 1rem;
+		height: auto;
 	}
 
 	.blog-list-item .excerpt-link {
@@ -405,8 +406,9 @@ footer a:hover {
 
 	.blog-list-item .excerpt-content-wrapper {
 		display: block;
-		align-items: stretch;
+		align-items: top;
 		flex-grow: 1;
+		padding-bottom: 2rem;
 	}
 
 	.blog-list-item .hero-image-wrapper {

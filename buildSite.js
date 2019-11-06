@@ -117,7 +117,7 @@ function parseMetadata(sourceDir, urlPath) {
 				//metadata.filename = pugFile   // PUG: the "filename" option is required to use includes and extends with "relative" paths. Value is the full qualified path to the file.
 				//metadata.basedir  = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths. 
 				metadata.basename = filename    // Just the filename without any path
-				metadata.url      = getUrl(urlPath, filename)
+				metadata.url      = getUrl(urlPath, filename.replace('.pug', '.html'))
 				return metadata
 			})
 		})
@@ -226,7 +226,7 @@ function renderBlogPosts(sourceDir, urlPath, options) {
 	})
 	options.post = undefined
 
-	console.log(JSON.stringify(options))
+	//console.log(JSON.stringify(options))
 }
 
 /**
@@ -246,7 +246,7 @@ function renderPages(sourceDir, urlPath, options) {
 		.map(filename => renderPage(path.join(sourceDir, filename), urlPath+'/'+filename.replace('.pug', '.html'), options))
 }
 
-
+/** This version works with parcel 
 parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	let outFile = path.resolve(dir.site, 'pug.config.js')
 	console.log("Writing", outFile)
@@ -254,12 +254,13 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	
 	fs.writeFileSync(outFile, content)
 })
+*/
 
 
 /**
  * Parse metadata from blogPosts. Then use that data to render the index page with the list of blog excerpts.
  * Then also render the blogPosts themselfs and static pages.
- 
+ */
 parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	
 	//console.log("\n\n======= posts and tags\n\n", options, "\n\n")
@@ -295,7 +296,7 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 		console.log("DONE! Site created successfully in".padEnd(logIndent), path.resolve(dir.dist));
 	})
 })
-*/
+
 
 
 function getUrl(urlPath, filename) {

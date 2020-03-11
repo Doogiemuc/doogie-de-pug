@@ -6,15 +6,16 @@
   "version": "1.0.0",
   "author": "Doogie",
   "scripts": {
-	"start": "parcel site/index.pug --log-level 4",
-	"build": "parcel build site/index.pug",
-	"buildSite": "node buildSite.js",
+    "start": "parcel site/index.pug --log-level 4",
+    "build": "parcel build site/index.pug",
+    "buildSite": "node buildSite.js",
     "supervisor": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
     "front": "reload --dir dist --watch-dir dist --port 3007 --browser"
   },
   "dependencies": {
     "json5": "^2.1.0",
     "ncp": "^2.0.0",
+    "parcel": "^1.12.4",
     "pug": "2.0.4"
   },
   "keywords": [

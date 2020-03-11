@@ -14,7 +14,7 @@ Keep in mind that the buildSite.js Script is a pure backend script executed on t
 
 # Dev workflow
 
- 1. Run backend and monitor files for changes.  `npm run mon`
+ 1. Run backend and monitor files for changes.  `npm run supervisor`
  2. Serve frontend and automatically reload browser on change `npm run front`
 
 # Production build

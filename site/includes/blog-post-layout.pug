@@ -7,7 +7,6 @@ mixin postTags(tags)
 				span.post-tag= tag
 
 mixin postHeader(post) 
-	.post-hero-image(style='background-image: url("/static/images/'+post.img+'");')
 	h1(class="post-title")= post.title
 	.post-metadata
 		span(class="post-date")= post.date
@@ -33,8 +32,9 @@ html(lang="en")
 				include navigation.pug
 			.left-spacer &nbsp;
 			.content
-				//- MAYBE: I could add +postHeader(post) here. Does every post have the same header or do I need flexibility?  Its just one line in the post.pug
+				.post-hero-image(style='background-image: url("/static/images/'+post.img+'");')
 				.blog-post
+					+postHeader(post)
 					block content
 				+postFooter(postsById)
 					

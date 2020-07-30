@@ -275,7 +275,7 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	if (options.tags) {
 		console.log("Render taxonomy pages:")
 		options.tags.filter(tag => tag.count > 1).forEach(tag => {
-			console.log(" ".repeat(logIndent), "Tag: ", tag.tag)
+			//console.log(" ".repeat(logIndent), "Tag: ", tag.tag)
 			let optionsCopy = JSON.parse(JSON.stringify(options))
 			optionsCopy.posts = optionsCopy.posts.filter(post => post.tags && post.tags.includes(tag.tag))
 			optionsCopy.tagListHeader = tag.tag

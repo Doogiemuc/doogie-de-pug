@@ -17,12 +17,14 @@ mixin postFooter(postsById)
 		.post-footer
 			if postsById[metadata.id].prev
 				a(href=postsById[metadata.id].prev.url).post-link
-					| << 
+					i.far.fa-arrow-alt-circle-left
+					| &nbsp;
 					span.post-link-title= postsById[metadata.id].prev.title
 			if postsById[metadata.id].next
 				a(href=postsById[metadata.id].next.url).post-link.post-link-next
 					span.post-link-title= postsById[metadata.id].next.title
-					| &nbsp;>>
+					| &nbsp;
+					i.far.fa-arrow-alt-circle-right
 
 html(lang="en")
 	include html-head.pug
@@ -37,7 +39,3 @@ html(lang="en")
 					+postHeader(post)
 					block content
 				+postFooter(postsById)
-					
-					
-			
-

@@ -60,7 +60,7 @@ const dist = {
   */
 
 /**
- * Parse metadata from the first code block at the top of pugGile
+ * Parse metadata from the first code block at the top of pug file
  * @param {String} pugFile path to a .pug file
  * @returns (A Promise that resolves to) the parsed JSON
  */
@@ -101,10 +101,10 @@ async function parseMetadataFromPug(pugFile) {
 }
 
 /**
- * Parse metadata from first code block of blog post pug files.
+ * Parse metadata from all pug files in the given sourceDir
  * Sort posts by date, calculate the next and prev links and count tags.
  * @param {String} sourceDir relative path under dir.site to dir with .pug files
- * @param {Array} list of metadata objects from top of pug files
+ * @param {String} urlPath URL prefix that these files will be available under. Needed for next and prev links
  * @return {Array} (A Promise that will resolve to a) list of metadata objects from each found pug file
  */
 function parseMetadata(sourceDir, urlPath) {
@@ -246,16 +246,18 @@ function renderPages(sourceDir, urlPath, options) {
 		.map(filename => renderPage(path.join(sourceDir, filename), urlPath+'/'+filename.replace('.pug', '.html'), options))
 }
 
-/** This version works with parcel 
-parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
-	let outFile = path.resolve(dir.site, 'pug.config.js')
-	console.log("Writing", outFile)
-	let content = "module.exports = { locals: " + JSON.stringify(options) + " }"
-	
-	fs.writeFileSync(outFile, content)
-})
-*/
-
+/**
+ * This creates a pug.config.js file with all the metadata information.
+ * This file can then be used by parcel-bundler
+ */ 
+function parseMetadataForParcel() {
+	return parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
+		let outFile = path.resolve(dir.site, 'pug.config.js')
+		console.log("Writing", outFile, "for parcelJS.")
+		let content = "module.exports = { locals: " + JSON.stringify(options) + " }"
+		fs.writeFileSync(outFile, content)
+	})
+}
 
 /**
  * Parse metadata from blogPosts. Then use that data to render the index page with the list of blog excerpts.
@@ -270,6 +272,9 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 
 	// render normal static pages
 	renderPages(site.pages, dir.pages, options)   // pass array of posts as "options" for the pug pages
+
+	// parse PUG metadata for parcelJS
+	//parseMetadataForParcel()
 
 	//render one page for each tag. 
 	if (options.tags) {

@@ -400,6 +400,11 @@ footer a:hover {
 		transition: none;
 	}
 
+	.blog-list-item .excerpt-content-wrapper {
+		padding: 1rem;
+		border: none;
+	}
+
 	.blog-list-item:hover .excerpt-content {
 		-webkit-transform: none;
 		transform: none;
@@ -419,11 +424,6 @@ footer a:hover {
 		flex-direction: column;
 	}
 
-	.blog-list-item .excerpt-content-wrapper {
-		padding-top: 1rem;
-		padding-bottom: 1rem;
-		border: none;
-	}
 
 	.blog-list-item .hero-image-wrapper {
 		width: auto;
@@ -436,18 +436,14 @@ footer a:hover {
 		opacity: 1.0;
 	}
 	
-	.blog-list-item .excerpt-content {
-		padding: 0 1rem;
-	}
-
 	.post-title {
 		font-size: 1.6rem;
 	}
 
 	/************ Mobile blog post ******************/
 	.blog-post {
-		/** need a bit more space at the right because of scrollbar */
-		margin: 0 1rem 0 0.5rem;
+		/** Blog post still has padding from above */
+		margin: 0;
 		font-size: 1rem;
 	}
 

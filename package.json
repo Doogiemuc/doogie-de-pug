@@ -9,8 +9,8 @@
     "start": "node buildSite.js",
     "parcel-serve": "parcel site/index.pug --log-level 4",
     "parcel-build": "parcel build site/index.pug",
-    "supervisor": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
-    "front": "reload --dir dist --watch-dir dist --port 3007 --browser"
+    "dev": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
+    "serve": "reload --dir dist --watch-dir dist --port 3007 --browser"
   },
   "dependencies": {
     "json5": "^2.1.3",
@@ -22,17 +22,8 @@
     "static site generator"
   ],
   "devDependencies": {
-    "cssnano": "^4.1.10",
-    "nodemon": "^1.19.4",
     "pug": "^2.0.4",
-    "reload": "^3.1.0",
+    "reload": "^3.1.1",
     "supervisor": "^0.12.0"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "buildSite.js",
-      "site"
-    ],
-    "ext": "js,pug,json,css,png.jpg,md"
   }
 }

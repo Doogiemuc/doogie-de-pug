@@ -2,25 +2,29 @@
 if !posts || posts.length === 0
 	p No posts in this blog yet!
 
+//-TODO: show current select tag on the left
 if tagListHeader
 	.tag-header-wrapper
 		span.post-tag= tagListHeader
 		span.post-tag.tag-header-close
 			a(href="/") &#x2715;
 
+//- MASONRY LAYOUT in PUG :-) Posts in colums. From left to right, top down. Each blog-list-item only uses the height it needs.
+.masonry-layout.container-fluid.mt-3
+	.row
+		- for (var col = 0; col < 3; col++)
+			.col
+				- for (var postIdx = 0; postIdx < posts.length; postIdx++)				
+					if (postIdx % 3 == col)
+						- 
+							var post = posts[postIdx]
+							post.idx = postIdx
+						include blog-list-item.pug
 
-ul.blog-list
-	each post in posts
-		li.blog-list-item
-			a.excerpt-link(href=post.url)
-				.hero-image-wrapper(style='background-image: url("/static/images/'+post.img+'");')
-				.excerpt-content-wrapper
-					.excerpt-content
-						h1.post-title= post.title
-						.post-metadata
-							span.post-date= post.date
-							if post.tags
-								.post-tags
-									for tag in post.tags
-										span.post-tag= tag
-						p.post-excerpt= post.excerpt
+//- Full width layout for mobile devices
+.full-width-layout
+	- for (var postIdx = 0; postIdx < posts.length; postIdx++)				
+		- 
+			var post = posts[postIdx]
+			post.idx = postIdx
+		include blog-list-item.pug

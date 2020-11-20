@@ -276,7 +276,7 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 	// parse PUG metadata for parcelJS
 	//parseMetadataForParcel()
 
-	//render one page for each tag. 
+	//render one page for each tag that has more than one count
 	if (options.tags) {
 		console.log("Render taxonomy pages:")
 		options.tags.filter(tag => tag.count > 1).forEach(tag => {

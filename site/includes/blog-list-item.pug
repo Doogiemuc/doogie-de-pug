@@ -1,0 +1,16 @@
+//- Input: post { img, title, excerpt }
+.post-card.card.mb-4.shadow
+	img.card-img-top(src="/static/images/"+post.img)
+	.card-body
+		a.stretched-link(href=post.url)
+			h3.post-title= post.idx + ' - ' + post.title
+		p.post-excerpt= post.excerpt
+		.post-metadata
+			div.post-date-wrapper
+				i.far.fa-calendar
+				span.post-date= post.date
+			if post.tags
+				.post-tags
+					i.fa.fa-tags
+					for tag in post.tags
+						span.post-tag= tag

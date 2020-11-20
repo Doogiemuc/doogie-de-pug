@@ -13,8 +13,6 @@ When a tag is followed by a dot(".") then the next block of indented lines are t
 When a tag is followed by indendet lines that are prefixed with "| " then this block becomes the tags textContent
 This also works when the tag has class, id, style or attributes.
 
-
-
 # Attributes
 
 (name=value) after a tag creates an HTML attribute.
@@ -86,4 +84,3 @@ These tricks can all be combined :-)
 # include
 
 # mixin
-

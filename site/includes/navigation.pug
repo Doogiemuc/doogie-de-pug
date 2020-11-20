@@ -1,20 +1,19 @@
-.header-wrapper
-	header
-		a(href="/")
-			img.siteLogo(src="/static/images/logo-hands.png", alt="Logo")
-			h1.siteTitle Doogie.de
-		h3.siteDescription Robert's personal blog
+header
+	a(href="/")
+		img.siteLogo(src="/static/images/logo-hands.png", alt="Logo")
+		h1.siteTitle Doogie.de
+	h3.siteDescription Robert's personal blog
 
-	ul.tag-cloud
-		each tag in tags
-			if tag.count > 1 
-				li 
-					a(href="/tags/"+encodeURIComponent(tag.tag)+".html").post-tag= '#'+tag.tag
+ul.tag-cloud
+	each tag in tags
+		if tag.count > 1 
+			li 
+				a(href="/tags/"+encodeURIComponent(tag.tag)+".html").post-tag= '#'+tag.tag
 
-	footer
-		a(href="/blog-posts/welcome-on-doogie-de.html" title="Impressum").social-link
-			i.fas.fa-info-circle
-		a(href="https://github.com/doogiemuc" title="DoogieMuc @ GitHub" target="_blank").social-link
-			i.fab.fa-github
-		a(href="https://www.facebook.com/DoogieMuc" title="DoogieMuc @ Facebook" target="_blank").social-link
-			i.fab.fa-facebook
+footer
+	a(href="/blog-posts/welcome-on-doogie-de.html" title="Impressum").social-link
+		i.fas.fa-info-circle
+	a(href="https://github.com/doogiemuc" title="DoogieMuc @ GitHub" target="_blank").social-link
+		i.fab.fa-github
+	a(href="https://www.facebook.com/DoogieMuc" title="DoogieMuc @ Facebook" target="_blank").social-link
+		i.fab.fa-facebook

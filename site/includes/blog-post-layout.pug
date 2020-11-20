@@ -9,8 +9,14 @@ mixin postTags(tags)
 mixin postHeader(post) 
 	h1(class="post-title")= post.title
 	.post-metadata
-		span(class="post-date")= post.date
-		+postTags(post.tags)
+		.post-date-wrapper
+			i.far.fa-calendar
+			span.post-date= post.date
+		if post.tags
+			.post-tags
+				i.fa.fa-tags
+				for tag in post.tags
+					span.post-tag= tag
 
 mixin postFooter(postsById)
 	if postsById && postsById[metadata.id]

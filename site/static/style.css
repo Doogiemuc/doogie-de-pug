@@ -11,7 +11,6 @@ body {
 .layout {
 	display: flex;
   flex-direction: row;
-	height: 100vh;
 }
 
 
@@ -19,7 +18,6 @@ body {
 .navigation {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 	position: fixed;
 	width: 30%;
 	height: 100vh;
@@ -142,8 +140,7 @@ footer .social-link:hover {
 	color: darkblue;
 }
 
-.post-card .post-metadata {
-	width: 100%;
+.post-metadata {
 	color: #aaa;
 }
 
@@ -299,18 +296,16 @@ footer .social-link:hover {
 
 	.navigation {
 		width: 100%;
-		height: 250px;
+		height: auto;
 		min-width: auto;
-		display: contents;
 		position: relative;
-		text-align: center;
+		box-shadow: 0 .5rem 0.5rem rgba(0,0,0,.1);
 	}
 
-	/* Bootstrap masonry layout */
-	.card-columns {
-		column-count: 1;
+	header {
+		height: auto;
+		min-height: auto;
 	}
-
 
 	.tag-cloud {
 		display: inline-flex;
@@ -328,6 +323,13 @@ footer .social-link:hover {
 		margin: 0 1rem;
 	}
 
+	.tag-cloud {
+		display: inline;
+	}
+	.tag-cloud a {
+		width: auto;
+	}
+
 
 
 
@@ -343,6 +345,7 @@ footer .social-link:hover {
 		height: auto;
 		min-height: auto;
 	}
+	
 
 	.blog-post-layout .tag-cloud {
 		display: none;

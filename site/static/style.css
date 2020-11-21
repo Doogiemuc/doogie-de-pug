@@ -1,12 +1,41 @@
+/**
+ *
+ * Doogie.de CSS Layout
+ *
+ * This layout builds upon the awesome Bootstrap Library (getbootstrap.com)
+ */
+
+/************** Google Font NOTO SERIF ***************/
+/*@import url('https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap'); */
+
+/* latin-ext */
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/notoserif/v9/ga6Iaw1J5X9T9RW6j9bNfFkWaCi_.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/notoserif/v9/ga6Iaw1J5X9T9RW6j9bNfFcWaA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /************** Overall layout ***************/
 body {
 	margin: 0;
 	padding: 0;
 	overflow-x: hidden;
-	/*font-family: Georgia, Times, "Times New Roman", serif;*/
 	font-family: 'Noto Serif', serif;
+	/*font-family: Georgia, Times, "Times New Roman", serif;*/
 	/*font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;*/
-	font-size: 1.2rem;
+	/*font-size: 1.2rem;*/
 }
 
 .layout {
@@ -74,7 +103,6 @@ header a:visited {
 	margin: 100px 0;
 	padding-left: 0;	
 	color: gray;
-	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 0.75rem;
 	line-height: 2;
 }
@@ -91,7 +119,6 @@ header a:visited {
 	color: darkblue;
 	background-color: #eeeeee;
 }
-
 
 footer {
 	width: 100%;
@@ -128,12 +155,25 @@ footer .social-link:hover {
 
 .right-container {
 	background-color: #EEE;
+	padding-top: 15px;
 }
 
 /* if a tag is selected, it is shown at the top */
 .selected-tag-wrapper {
 	margin: 2rem 0;
 }
+
+.selected-tag-wrapper .selected-tag {
+	padding: 3px 1rem;
+	font-size: 0.75rem;
+	line-height: 2;
+}
+
+/* This isused in the alert at the top AND in the tag-cloud! */
+.selected-tag {
+	background: lightgray;
+}
+
 
 
 
@@ -219,16 +259,15 @@ footer .social-link:hover {
 
 .post-tags {
 	display: inline;
-	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 0.75rem;
 }
 
 .post-tag {
+	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
 	border: 1px solid #ebebeb;
 	border-radius: 3px;
 	margin-left: 4px;
 	padding: 1px 4px;
-	background-color: white;
 }
 
 .blog-post-card p {
@@ -342,7 +381,13 @@ footer .social-link:hover {
 	}
 
 	.tag-cloud {
-		display: inline-flex;
+		margin: 1rem 0;
+	}
+	.tag-cloud li {
+		display: inline;
+	}
+	.tag-cloud a {
+		width: auto;
 	}
 
 	footer {
@@ -353,19 +398,56 @@ footer .social-link:hover {
 		display: none;
 	}
 
-	.tag-cloud {
-		display: inline;
-	}
-	.tag-cloud a {
-		width: auto;
-	}
-
-	/* Less spacing on mobile blog post */
+	/* Less spacing on mobile blog post, padding for site-sitle on mobile */
 	.container-fluid {
 		padding-right: 10px;
 		padding-left: 10px;
 	}
 
+	/************ Layout for one blog post on mobile ******************/
+	header {
+		height: auto;
+		min-height: auto;
+	}
+	
+	.blog-post-layout .tag-cloud {
+		display: none;
+	}
+
+	.blog-post-layout .siteLogo {
+		display: none;
+	}
+
+	.blog-post-layout .siteTitle {
+		font-size: 20pt;
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		background-color: white;
+		padding: 5px 0;
+		border-bottom: 1px solid lightgray;
+		z-index: 100;
+		box-shadow: 0 1px 5px lightgray;
+	}
+
+	/** hide some elements on the blog post page on mobile */
+	.blog-post-layout footer {
+		display: none;
+	}
+	.blog-post-layout .siteDescription {
+		display: none;
+	}
+
+	.post-footer {
+		margin: 2rem 1.5rem 2rem 1rem;
+	}
+
+	/* Margin at the top of the blog-post for site header on mobile */
+	.blog-post-card {
+		margin-top: 40px;
+	}
+	
 	.blog-post-card .card-body {
 		padding: 1rem;
 	}
@@ -383,55 +465,16 @@ footer .social-link:hover {
 		font-size: 1.4rem;
 	}
 
-
-
-
-
-	/************ Mobile blog post ******************/
-	header {
-		height: auto;
-		min-height: auto;
+	/** Less indent on mobile in the dialog between our two friends */
+	.turtle {
+		padding-left: 0.5em;
+		text-indent:-0.5em;
 	}
-	
-
-	.blog-post-layout .tag-cloud {
-		display: none;
+	.achilles {
+		padding-left: 0.5em;
+		text-indent:-0.5em;
 	}
 
-	.blog-post-layout .siteLogo {
-		display: none;
-	}
-
-	.blog-post-layout .siteTitle {
-		font-size: 20pt;
-		position: fixed;
-		width: 100%;
-		top: 0;
-		left: 0;
-		background: #f1f1f1;
-		padding: 5px 0;
-		border-bottom: 1px solid lightgray;
-		z-index: 100;
-		box-shadow: 0 1px 5px lightgray;
-	}
-
-	.blog-post-layout .content {
-		margin-top: 50px;
-	}
-
-	/** hide some elements on the blog post page on mobile */
-	.blog-post-layout footer {
-		display: none;
-	}
-	.blog-post-layout .siteDescription {
-		display: none;
-	}
-
-	.post-footer {
-		margin: 2rem 1.5rem 2rem 1rem;
-	}
-
-	
 }
 
 

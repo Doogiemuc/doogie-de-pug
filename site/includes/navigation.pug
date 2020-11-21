@@ -8,7 +8,10 @@ ul.tag-cloud
 	each tag in tags
 		if tag.count > 1 
 			li 
-				a(href="/tags/"+encodeURIComponent(tag.tag)+".html").post-tag= '#'+tag.tag
+				if selectedTag == tag.tag
+					a(href="/tags/"+encodeURIComponent(tag.tag)+".html").post-tag.selected-tag= '#'+tag.tag
+				else
+					a(href="/tags/"+encodeURIComponent(tag.tag)+".html").post-tag= '#'+tag.tag
 
 footer
 	a(href="/blog-posts/welcome-on-doogie-de.html" title="Impressum").social-link

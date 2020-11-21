@@ -7,7 +7,7 @@ if selectedTag
 	.container-fluid.selected-tag-wrapper
 		.alert.alert-light
 			i.fa.fa-tags
-			span.post-tag= selectedTag
+			span.post-tag.selected-tag= '#' + selectedTag
 			a.float-right(href="/") &#x2715;
 
 //- MASONRY LAYOUT in PUG :-) Posts in colums. From left to right, top down. Each blog-list-item only uses the height it needs.

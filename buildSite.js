@@ -197,7 +197,7 @@ function renderPage(pugFile, url, options) {
 	options.basedir   = dir.site  // PUG: the "basedir" option is required to use includes and extends with "absolute" paths
 	
 	let pugTemplate   = fs.readFileSync(pugFile)
-	let html          = pug.render(pugTemplate, options)
+	let html          = pug.render(pugTemplate, options)    // The resulting HTML is already minified.
 	
 	fs.mkdirSync(path.dirname(outFile), { recursive: true })
 	fs.writeFileSync(outFile, html)
@@ -246,6 +246,18 @@ function renderPages(sourceDir, urlPath, options) {
 		.map(filename => renderPage(path.join(sourceDir, filename), urlPath+'/'+filename.replace('.pug', '.html'), options))
 }
 
+function renderTaxonomyPage(options) {
+	console.log("Render taxonomy pages:")
+	options.tags.filter(tag => tag.count > 1).forEach(tag => {
+		//console.log(" ".repeat(logIndent), "Tag: ", tag.tag)
+		let optionsCopy = JSON.parse(JSON.stringify(options))
+		optionsCopy.posts = optionsCopy.posts.filter(post => post.tags && post.tags.includes(tag.tag))
+		optionsCopy.selectedTag = tag.tag
+		renderPage(path.join(dir.site, dir.indexFile), 'tags/'+encodeURIComponent(tag.tag)+'.html', optionsCopy)    
+		renderPage(path.join(dir.site, dir.indexFile), 'tags/'+tag.tag+'.html', optionsCopy)    //BUGFIX: Have to also render with unencoded name for misconfigured IONOS server
+	})
+}
+
 /**
  * This creates a pug.config.js file with all the metadata information.
  * This file can then be used by parcel-bundler
@@ -264,6 +276,8 @@ function parseMetadataForParcel() {
  * Then also render the blogPosts themselfs and static pages.
  */
 parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
+
+	//TODO: CLEAN DIST: but only with command line parameter --clean
 	
 	//console.log("\n\n======= posts and tags\n\n", options, "\n\n")
 
@@ -278,20 +292,14 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 
 	//render a taxonomy page for each tag that has more than one count
 	if (options.tags) {
-		console.log("Render taxonomy pages:")
-		options.tags.filter(tag => tag.count > 1).forEach(tag => {
-			//console.log(" ".repeat(logIndent), "Tag: ", tag.tag)
-			let optionsCopy = JSON.parse(JSON.stringify(options))
-			optionsCopy.posts = optionsCopy.posts.filter(post => post.tags && post.tags.includes(tag.tag))
-			optionsCopy.selectedTag = tag.tag
-			renderPage(path.join(dir.site, dir.indexFile), 'tags/'+encodeURIComponent(tag.tag)+'.html', optionsCopy)    // use relative url!
-		})
+		renderTaxonomyPage(options)
 	}
 
 	// render index.html   Uses list of posts to generate list of excerpts
 	console.log("Render "+dir.indexFile)
-	options.posts = options.posts.splice(0,10) // index page ned first five posts
+	options.posts = options.posts.splice(0,10)
 	renderPage(path.join(dir.site, dir.indexFile), dir.indexFile.replace('.pug', '.html'), options)
+
 }).then(() => {
 	console.log("Copy static assets".padEnd(logIndent), site.static, " => ", dist.static)
 	ncp(site.static, dist.static, function (err) {

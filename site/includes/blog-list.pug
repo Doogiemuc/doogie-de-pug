@@ -3,11 +3,12 @@ if !posts || posts.length === 0
 	p No posts in this blog yet!
 
 //-TODO: show current select tag on the left
-if tagListHeader
-	.tag-header-wrapper
-		span.post-tag= tagListHeader
-		span.post-tag.tag-header-close
-			a(href="/") &#x2715;
+if selectedTag
+	.container-fluid.selected-tag-wrapper
+		.alert.alert-light
+			i.fa.fa-tags
+			span.post-tag= selectedTag
+			a.float-right(href="/") &#x2715;
 
 //- MASONRY LAYOUT in PUG :-) Posts in colums. From left to right, top down. Each blog-list-item only uses the height it needs.
 .masonry-layout.container-fluid.mt-3

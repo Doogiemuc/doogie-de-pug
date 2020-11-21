@@ -31,6 +31,14 @@ mixin postFooter(postsById)
 					span.post-link-title= postsById[metadata.id].next.title
 					| &nbsp;
 					i.far.fa-arrow-alt-circle-right
+		.licence
+			p(xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#" class="license-text")
+				span(rel="dct:title") Doogie.de is licensed under 
+				a(rel="license" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0") CC BY-NC 4.0&nbsp;
+				i.fab.fa-creative-commons &nbsp;
+				i.fab.fa-creative-commons-by &nbsp;
+				i.fab.fa-creative-commons-nc-eu
+
 
 html(lang="en")
 	include html-head.pug

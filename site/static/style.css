@@ -3,9 +3,10 @@ body {
 	margin: 0;
 	padding: 0;
 	overflow-x: hidden;
-	font-family: Georgia, Times, "Times New Roman", serif;
+	/*font-family: Georgia, Times, "Times New Roman", serif;*/
+	font-family: 'Noto Serif', serif;
 	/*font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;*/
-	font-size: 1rem;
+	font-size: 1.2rem;
 }
 
 .layout {
@@ -52,24 +53,25 @@ header a:visited {
 	margin: 0;
 	font-size: 36pt;
 	color: darkblue;
+	font-weight: bold;
+	
 }
 
 .siteTitle a:visited {
 	color: darkblue;
 }
 
-
 .siteDescription {
 	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 12pt;
-	letter-spacing: 2px;
+	letter-spacing: 1.7px;
 	color: grey;
 	font-weight: normal;
 }
 
 .tag-cloud {
 	list-style: none;
-	margin-left: 0;
+	margin: 100px 0;
 	padding-left: 0;	
 	color: gray;
 	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
@@ -128,6 +130,13 @@ footer .social-link:hover {
 	background-color: #EEE;
 }
 
+/* if a tag is selected, it is shown at the top */
+.selected-tag-wrapper {
+	margin: 2rem 0;
+}
+
+
+
 .blog-list-card {
 	/* shadow transition effect from https://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
 	-webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -170,6 +179,7 @@ footer .social-link:hover {
 
 .blog-list-card .post-title {
 	color: darkblue;
+	font-family: 'Noto Serif', serif;
 }
 
 .post-metadata {
@@ -187,6 +197,7 @@ footer .social-link:hover {
 
 .blog-post-card .card-body {
 	max-width: 768px;
+	padding-top: 3rem;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -202,7 +213,7 @@ footer .social-link:hover {
 
 .post-date {
 	font-family: "Work Sans", "Helvetica Neue", Helvetica, sans-serif;
-	font-size: 0.75rem;
+	font-size: 0.8rem;
 	margin-left: 6px;
 }
 
@@ -217,10 +228,12 @@ footer .social-link:hover {
 	border-radius: 3px;
 	margin-left: 4px;
 	padding: 1px 4px;
+	background-color: white;
 }
 
-.blog-post p {
+.blog-post-card p {
 	text-align: justify;
+	margin-bottom: 0.5rem;
 }
 
 .post-link {
@@ -256,6 +269,18 @@ footer .social-link:hover {
 	color:gray;
 }
 
+.licence {
+	text-align: center;
+	color: #aaa;
+	font-size: 12px;
+}
+.licence a {
+	color: #aaa
+}
+
+
+
+/******* Achilles & Turtle *******/
 .turtle {
 	padding-left: 1.5em;
 	text-indent:-1.5em;
@@ -328,10 +353,6 @@ footer .social-link:hover {
 		display: none;
 	}
 
-	.content {
-		margin: 0 1rem;
-	}
-
 	.tag-cloud {
 		display: inline;
 	}
@@ -339,17 +360,34 @@ footer .social-link:hover {
 		width: auto;
 	}
 
+	/* Less spacing on mobile blog post */
+	.container-fluid {
+		padding-right: 10px;
+		padding-left: 10px;
+	}
+
+	.blog-post-card .card-body {
+		padding: 1rem;
+	}
+
+	.blog-post-card h1 {
+		font-size: 2rem;
+	}
+	.blog-post-card h2 {
+		font-size: 1.8rem;
+	}
+	.blog-post-card h3 {
+		font-size: 1.6rem;
+	}
+	.blog-post-card h4 {
+		font-size: 1.4rem;
+	}
+
 
 
 
 
 	/************ Mobile blog post ******************/
-	.blog-post {
-		/** Blog post still has padding from above */
-		margin: 0;
-		font-size: 1rem;
-	}
-
 	header {
 		height: auto;
 		min-height: auto;
@@ -387,17 +425,6 @@ footer .social-link:hover {
 	}
 	.blog-post-layout .siteDescription {
 		display: none;
-	}
-	.post-link-title {
-		display: none;
-	}
-		
-	.post-hero-image {
-		height: 10vh;
-	}
-
-	.post-date {
-		font-size: 0.8rem;
 	}
 
 	.post-footer {

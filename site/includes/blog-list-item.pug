@@ -9,6 +9,8 @@
 			.post-date-wrapper
 				i.far.fa-calendar
 				span.post-date= post.date
+				if post.sticky
+					i.fas.fa-thumbtack.post-date
 			if post.tags
 				.post-tags
 					i.fa.fa-tags

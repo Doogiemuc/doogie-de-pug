@@ -1,9 +1,9 @@
 //- Input: post { img, title, excerpt }
-.post-card.card.mb-4.shadow
+.blog-list-card.card.mb-4.shadow
 	img.card-img-top(src="/static/images/"+post.img)
 	.card-body
 		a.stretched-link(href=post.url)
-			h3.post-title= post.idx + ' - ' + post.title
+			h3.post-title= post.title
 		p.post-excerpt= post.excerpt
 		.post-metadata
 			.post-date-wrapper

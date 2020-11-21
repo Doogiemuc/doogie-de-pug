@@ -39,9 +39,10 @@ html(lang="en")
 			.navigation
 				include navigation.pug
 			.left-spacer &nbsp;
-			.content
-				.post-hero-image(style='background-image: url("/static/images/'+post.img+'");')
-				.blog-post
-					+postHeader(post)
-					block content
+			.right-container.container-fluid
+				.blog-post-card.card.shadow.mt-3
+					img.card-img-top(src="/static/images/"+post.img)
+					.card-body
+						+postHeader(post)
+						block content
 				+postFooter(postsById)

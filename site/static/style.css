@@ -19,7 +19,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	position: fixed;
-	width: 30%;
+	width: 25%;
 	height: 100vh;
 	min-width: 300px;
 	text-align: center;
@@ -87,7 +87,7 @@ header a:visited {
 
 .tag-cloud a:hover {
 	color: darkblue;
-	background: #eeeeee;
+	background-color: #eeeeee;
 }
 
 
@@ -113,7 +113,7 @@ footer .social-link:hover {
   It keeps the content from slipping under the navigation
 */
 .left-spacer {
-	width: 30%;
+	width: 25%;
 	height: 100vh;
 	min-width: 300px;
 	flex-shrink: 0;
@@ -121,22 +121,54 @@ footer .social-link:hover {
 
 /**
  * ============= Masonry layout for blog post cards on start page =============
- * Now archived with bootstrap's awesome card-columns
+ * Now done with bootstrap's awesome card-columns
  */
 
 .right-container {
-	background-color: #EEE; 
+	background-color: #EEE;
 }
 
+.blog-list-card {
+	/* shadow transition effect from https://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
+	-webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+	transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+	/*border-radius: 1rem;*/
+}
 
-.post-card .card-img-top {
+.card-img-top {
 	object-fit: cover; /* Cover the area but keep image proportions */
 	object-position: center; /* Center the image within the element */
 	width: 100%;
 	max-height: 200px;
+	/*border-radius: 1rem;*/
+	
 }
 
-.post-card .post-title {
+.blog-list-card::after {
+  content: "";
+  border-radius: 5px;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  -webkit-transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.blog-list-card:hover {
+  -webkit-transform: scale(1.02, 1.02);
+  transform: scale(1.02, 1.02);
+}
+
+.blog-list-card:hover::after {
+    opacity: 1;
+}
+
+.blog-list-card .post-title {
 	color: darkblue;
 }
 
@@ -147,48 +179,25 @@ footer .social-link:hover {
 
 
 /************** One blog post ***************/
-.blog-post {
-	margin: 0 5% 5% 5%;
-	padding: 5%;
-	font-family: Georgia, Times, "Times New Roman", serif;
-	line-height: 1.5;
-	font-size: 1.2rem;
-	position: relative;
-	background: white;
+.blog-post-card {
+	max-width: 1024px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-/* Shadow effekt at the bottom of a blog-post */
-.blog-post:before, .blog-post:after
-{
-  z-index: -1;
-  position: absolute;
-  content: "";
-  bottom: 15px;
-  left: 5px;
-  width: 50%;
-  height: 50px;
-  /*max-width:300px;*/
-  background: #ccc;
-  box-shadow: 0 15px 10px #ccc;
-  transform: rotate(-2deg);
+.blog-post-card .card-body {
+	max-width: 768px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.blog-post:after {
-	right: 5px;
-	left: auto;
-	transform: rotate(2deg);
-}
-
-.post-hero-image {
-	height: 33vh;
-	width: 100%;
-	background-size: cover;
-    background-repeat: no-repeat;
-	background-position: 50% 50%;
-}
-
-.blog-post .post-metadata {
+.blog-post-card .post-metadata {
 	margin-bottom: 2rem;
+}
+
+.blog-post-card .post-metadata div {
+	display: inline;	/* Show date and tags in one line */
+	margin-right: 1rem;
 }
 
 .post-date {
@@ -233,10 +242,10 @@ footer .social-link:hover {
 /******* Post footer *******/
 
 .post-footer {
-	margin: 2rem 6%;
+	margin: 2rem auto 200px auto;			/* allow scrolling past end of blog post a bit */
+	padding: 1.25rem;
+	max-width: 768px;
 	font-family: Georgia, Times, "Times New Roman", serif;
-	/* allow scrolling past end of blog post a bit */
-	margin-bottom: 200px;
 	color: grey;
 }
 

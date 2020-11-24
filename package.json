@@ -9,7 +9,7 @@
     "start": "node buildSite.js",
     "parcel-serve": "parcel site/index.pug --log-level 4",
     "parcel-build": "parcel build site/index.pug",
-    "dev": "supervisor -w site --extensions js,pug,json,css --no-restart-on success buildSite.js",
+    "dev": "supervisor -w site --extensions js,pug,json,css --timestamp --no-restart-on success buildSite.js",
     "serve": "reload --dir dist --watch-dir dist --port 3007 --browser"
   },
   "dependencies": {

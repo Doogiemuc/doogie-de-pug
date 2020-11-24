@@ -19,6 +19,8 @@ const logIndent = 40
     as output path under `dist` and
     as HTTP URL under baseUrl
 */
+
+// Directory lacout
 const dir = {
 	site:          'site',
 	dist:          'dist',
@@ -29,17 +31,23 @@ const dir = {
 	baseUrl:       '/',
 	indexFile:     'index.pug',
 }
+
+// INPUT paths
 const site = {
 	blogPosts: path.join(dir.site, dir.blogPosts),
 	includes:  path.join(dir.site, dir.includes),
 	pages:     path.join(dir.site, dir.pages),
 	static:    path.join(dir.site, dir.static),
+	indexFile: path.join(dir.site, dir.indexFile)
 }
+
+// OUTPUT paths
 const dist = {
 	blogPosts: path.join(dir.dist, dir.blogPosts),
 	includes:  path.join(dir.dist, dir.includes),
 	pages:     path.join(dir.dist, dir.pages),
 	static:    path.join(dir.dist, dir.static),
+	indexFile: path.join(dir.site, dir.indexFile.replace('.pug', '.html'))
 }
 
 
@@ -185,7 +193,7 @@ function parseMetadata(sourceDir, urlPath) {
 /**
  * 
  * @param {String} pugFile path to pug file
- * @param {String} url relative url that the file will be written to, e.g. blog-posts/
+ * @param {String} url relative url that the file will be written to, e.g. blog-posts/some-post.html
  * @param {Object} options (optional) data that will be available inside the pug file
  */
 function renderPage(pugFile, url, options) {
@@ -295,10 +303,10 @@ parseMetadata(site.blogPosts, dir.blogPosts).then(options => {
 		renderTaxonomyPage(options)
 	}
 
-	// render index.html   Uses list of posts to generate list of excerpts
+	// render index.html 
 	console.log("Render "+dir.indexFile)
-	options.posts = options.posts.splice(0,10)
-	renderPage(path.join(dir.site, dir.indexFile), dir.indexFile.replace('.pug', '.html'), options)
+	//MAYBE: Render only first 10 posts:   options.posts = options.posts.splice(0,10)
+	renderPage(site.indexFile, dir.indexFile.replace('.pug', '.html'), options)
 
 }).then(() => {
 	console.log("Copy static assets".padEnd(logIndent), site.static, " => ", dist.static)

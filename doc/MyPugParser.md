@@ -1,5 +1,9 @@
 # My PUG parser
 
+This is just a very very rough scetch about what a PUG parser would need to do.
+
+# Gneral
+
 Lines indented with spaces or tab create a neested block.
 
 # Tags

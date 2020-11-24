@@ -174,11 +174,7 @@ footer .social-link:hover {
 	background: lightgray;
 }
 
-
-
-
 .blog-list-card {
-	/* shadow transition effect from https://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
 	-webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 	transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 	/*border-radius: 1rem;*/
@@ -227,6 +223,20 @@ footer .social-link:hover {
 }
 
 
+/******* Let elements appear when they become visible ******/
+
+.appear-when-visible {
+	opacity: 0;
+	transform: translateY(50px);
+	/*transition: opacity 5s, transform 5s ease-out;*/
+}
+
+.appear-anim {
+	opacity: 1.0 !important;
+	transform: none;
+}
+
+
 
 /************** One blog post ***************/
 .blog-post-card {
@@ -238,6 +248,7 @@ footer .social-link:hover {
 .blog-post-card .card-body {
 	max-width: 768px;
 	padding-top: 3rem;
+	padding-bottom: 3rem;
 	margin-left: auto;
 	margin-right: auto;
 }

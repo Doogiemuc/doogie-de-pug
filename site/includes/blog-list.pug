@@ -20,6 +20,7 @@ if selectedTag
 						- 
 							var post = posts[postIdx]
 							post.idx = postIdx
+							if (post.idx > 10) post["appear-when-visible"] = true
 						include blog-list-item.pug
 
 //- Full width layout for mobile devices

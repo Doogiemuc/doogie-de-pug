@@ -1,0 +1,21 @@
+extend ../includes/blog-post-layout.pug
+
+block content
+	-
+		var metadata = { 
+			id: "Sokrates-turtle-template",
+			title: "Sokrates & Turtle ",
+			date: "2021-01-01",
+			img: "mandel-fractal.png",
+			tags: ["Sokrates & Turtle", "Philosophy"],
+			excerpt: "What are our two friends going to learn today?",
+			hidden: true
+		}
+
+	p.turtle Hey Sokrates! How're you doing?
+
+	p.sokrates Thanks, fine! Today is the perfect weather for philosophizing again.
+
+	p.turtle What question are you pondering about today?
+
+	p.sokrates Well, you know, I was just thinking ...

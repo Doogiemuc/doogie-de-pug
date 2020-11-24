@@ -329,6 +329,7 @@ footer .social-link:hover {
 	font-style: italic;
 	color: grey;
 }
+
 .achilles {
 	padding-left: 1.5em;
 	text-indent:-1.5em;
@@ -338,6 +339,17 @@ footer .social-link:hover {
 	font-style: italic;
 	color: grey;
 }
+
+.sokrates {
+	padding-left: 1.5em;
+	text-indent:-1.5em;
+}
+.sokrates::before {
+	content: "Sokrates:\00A0";
+	font-style: italic;
+	color: grey;
+}
+
 .indent {
 	padding-left: 1.5em;
 }
@@ -471,6 +483,10 @@ footer .social-link:hover {
 		text-indent:-0.5em;
 	}
 	.achilles {
+		padding-left: 0.5em;
+		text-indent:-0.5em;
+	}
+	.sokrates {
 		padding-left: 0.5em;
 		text-indent:-0.5em;
 	}

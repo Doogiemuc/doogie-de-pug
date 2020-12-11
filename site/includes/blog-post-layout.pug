@@ -23,14 +23,18 @@ mixin postFooter(postsById)
 		.post-footer
 			if postsById[metadata.id].prev
 				a(href=postsById[metadata.id].prev.url).post-link
-					i.far.fa-arrow-alt-circle-left
+					i.fas.fa-arrow-alt-circle-left
 					| &nbsp;
 					span.post-link-title= postsById[metadata.id].prev.title
 			if postsById[metadata.id].next
 				a(href=postsById[metadata.id].next.url).post-link.post-link-next
 					span.post-link-title= postsById[metadata.id].next.title
 					| &nbsp;
-					i.far.fa-arrow-alt-circle-right
+					i.fas.fa-arrow-alt-circle-right
+		.clear-fix.text-center.mb-5
+			a(href="/")
+				img(src='/static/images/logo-hands.png' alt="Logo")
+			
 		.licence
 			p(xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#" class="license-text")
 				span(rel="dct:title") Doogie.de is licensed under 

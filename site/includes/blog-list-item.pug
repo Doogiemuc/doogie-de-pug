@@ -1,5 +1,5 @@
 //- Input: post { img, title, excerpt }
-div(class=post["appear-when-visible"] ? "appear-when-visible" : "").blog-list-card.card.mb-4.shadow
+div(class=post["appear-when-visible"] ? "appear-when-visible" : "").blog-list-card.card.shadow
 	img.card-img-top(src="/static/images/"+post.img)
 	.card-body
 		a.stretched-link(href=post.url)

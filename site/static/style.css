@@ -177,7 +177,7 @@ footer .social-link:hover {
 .blog-list-card {
 	-webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 	transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-	/*border-radius: 1rem;*/
+	margin-bottom: 30px;
 }
 
 .card-img-top {
@@ -189,28 +189,10 @@ footer .social-link:hover {
 	
 }
 
-.blog-list-card::after {
-  content: "";
-  border-radius: 5px;
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  -webkit-transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
 .blog-list-card:hover {
   -webkit-transform: scale(1.02, 1.02);
-  transform: scale(1.02, 1.02);
-}
-
-.blog-list-card:hover::after {
-    opacity: 1;
+	transform: scale(1.02, 1.02);
+	box-shadow: 0 .5rem 1rem rgba(0,0,0,0.5) !important;
 }
 
 .blog-list-card .post-title {
@@ -248,7 +230,7 @@ footer .social-link:hover {
 .blog-post-card .card-body {
 	max-width: 768px;
 	padding-top: 3rem;
-	padding-bottom: 3rem;
+	padding-bottom: 10rem;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -305,9 +287,9 @@ footer .social-link:hover {
 /******* Post footer *******/
 
 .post-footer {
-	margin: 2rem auto 200px auto;			/* allow scrolling past end of blog post a bit */
+	margin: 2rem auto;
 	padding: 1.25rem;
-	max-width: 768px;
+	max-width: 1024px;
 	font-family: Georgia, Times, "Times New Roman", serif;
 	color: grey;
 }
@@ -463,7 +445,7 @@ footer .social-link:hover {
 	}
 
 	.post-footer {
-		margin: 2rem 1.5rem 2rem 1rem;
+		margin: 2rem 0;
 	}
 
 	/* Margin at the top of the blog-post for site header on mobile */

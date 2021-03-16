@@ -22,7 +22,7 @@
     "static site generator"
   ],
   "devDependencies": {
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "reload": "^3.1.1",
     "supervisor": "^0.12.0"
   }
